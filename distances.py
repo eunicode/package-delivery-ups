@@ -122,24 +122,26 @@ with open("location_data.csv") as csv_file_location:
     # The second parameter represents the truck number
     # The third parameter represents the current location that is updated each time a truck moves
 
-    # The base case of the algorithm is stated in the initial if statement (see section 2). This breaks the recursion
-    # once the input list has a size of 0.
-    # It starts by setting a "lowest value" of 50.0 and then uses the check current distance function to loop through
-    # every possible point that is currently available to see if there is a lower value. If there is than the lowest
-    # value is updated and the search continues (see section 3). Once it has searched through all possible routes
-    # the truck can go given the available packages, it then adds that package object and associated index to
-    # new lists (see section 4). To ensure that the right truck packages are being associated, the second parameter
-    # is checked. If the truck truck is being sorted than the optimized delivery path will be associated to the lists
-    # first_optimized_truck and first_optimized_truck_index. Each time these lists are updated, the lowest value is
-    # removed from the argument list, truck_distance_list. This will allow us to update current location and recursively
-    # call the function. Once the argument list is empty it will return the empty list and the function call will end.
+    # The base case of the algorithm is stated in the initial if statement (see section 2).
+    # This breaks the recursion once the input list has a size of 0.
+    # It starts by setting a "lowest value" of 50.0
+    # and then uses the check current distance function to loop through every possible point that is currently available to see if there is a lower value.
+    # If there is than the lowest value is updated and the search continues (see section 3).
+    # Once it has searched through all possible routes the truck can go given the available packages,
+    # it then adds that package object and associated index to new lists (see section 4).
+    # To ensure that the right truck packages are being associated, the second parameter is checked.
+    # If the truck truck is being sorted than the optimized delivery path will be associated to the lists first_optimized_truck and first_optimized_truck_index.
+    # Each time these lists are updated, the lowest value is removed from the argument list, truck_distance_list.
+    # This will allow us to update current location and recursively call the function.
+    # Once the argument list is empty it will return the empty list and the function call will end.
 
-    # The space-time complexity of this algorithm is O(N^2). This is due to the two for loops and the repeated lookup
-    # functionality required to determine the lowest possible path then move the truck to that position.
+    # The space-time complexity of this algorithm is O(N^2).
+    # This is due to the two for loops and the repeated lookup functionality required to determine the lowest possible path then move the truck to that position.
 
     def calculate_shortest_distance(
         truck_distance_list, truck_number, current_location
-    ):  # section 1
+    ):
+        # section 1
         if len(truck_distance_list) == 0:  # section 2
             return truck_distance_list
         else:  #
