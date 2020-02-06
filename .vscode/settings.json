@@ -1,0 +1,9 @@
+{
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "editor.formatOnSave": true
+}
