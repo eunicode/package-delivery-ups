@@ -18,15 +18,15 @@ class HashTable:
     def __init__(self, initial_capacity=10):
         # Chaining: initialize slots with empty lists
         self.map = []
-        for i in range(initial_capacity):
+        for elm in range(initial_capacity):
             self.map.append([])
 
     # private getter to create a hash key / Function to be used internally by the class
     # Space complexity is O(1)
     # Time complexity is
     def _get_hash(self, key):
-        bucket = int(key) % len(self.map)
-        return bucket
+        return int(key) % len(self.map)
+        # return bucket
 
     # Insert a new package value into the hash table
     # Space complexity is O(N)
@@ -92,11 +92,11 @@ ht.insert(
     [1, "195 W Oakland Ave", "Salt Lake City", "UT", "84115", "10:30:00", "21", "None"],
 )
 
-print(f"map: {ht.map}")
+# print(f"map: {ht.map}")
 
-for key in (1, 2):
-    v = ht.get(key)
-    print(v)
+# for key in (1, 2):
+#     v = ht.get(key)
+#     print(v)
 
 # =================================================================
 #                             NOTES
