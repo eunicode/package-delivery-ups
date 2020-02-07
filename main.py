@@ -1,6 +1,6 @@
 # Eunice Park ID: #001128345
 
-from parse_csv import get_hash_map
+from hash_table_instance import get_hash_map
 from packages import total_distance
 import datetime
 from helper import interface_print

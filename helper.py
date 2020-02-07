@@ -1,4 +1,4 @@
-from parse_csv import get_hash_map
+from hash_table_instance import get_hash_map
 
 
 def interface_print(count):

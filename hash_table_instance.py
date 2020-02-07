@@ -47,7 +47,7 @@ with open("package_data.csv") as csv_file:
         value = iterate_value
 
         # In place constraints to create a list of packages that are loaded onto the trucks
-        # The data structure here focuses on moving all attributes of a package into a nested listed.
+        # The data structure here focuses on moving all attributes of a package into a nested list.
         # This allows for quick lookup and sorting that can be based on every package detail
         # Below is the set of constraints that determine which packages are loaded in either of the two trucks
         if value[6] != "EOD":

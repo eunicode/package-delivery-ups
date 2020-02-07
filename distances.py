@@ -1,7 +1,7 @@
 import csv
 import datetime
 
-# from parse_csv import print_csv
+# from hash_table_instance import print_csv
 
 # Print parsed csv data
 def print_csv_2():
