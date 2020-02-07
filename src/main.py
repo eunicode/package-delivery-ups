@@ -1,7 +1,7 @@
 # Eunice Park ID: #001128345
 
 from hash_table_instance import get_hash_map
-from packages import total_distance
+from package_delivery import total_distance
 import datetime
 from helper import interface_print
 
@@ -124,6 +124,7 @@ while True:
                 get_hash_map().get(str(count))[9] = "Leaves at " + first_time
 
                 # filler function
+                interface_print(count)
 
             elif convert_first_time <= convert_user_time:
                 # Then checks if the package has left the hub but has not been delivered yet
@@ -132,6 +133,7 @@ while True:
                     get_hash_map().get(str(count))[9] = "Left at " + first_time
 
                     # filler
+                    interface_print(count)
 
                 # If the package has already been delivered than it displays the time
                 else:
@@ -139,6 +141,7 @@ while True:
                     get_hash_map().get(str(count))[9] = "Left at " + first_time
 
                     # filler
+                    interface_print(count)
         except ValueError:
             print("Invalid entry")
             exit()
@@ -148,7 +151,7 @@ while True:
         exit()
     # -------------------------------------------------------------------
     else:
-        print("Invalid command.")
+        print("Invalid entry")
         exit()
 
 

@@ -3,7 +3,7 @@ from hash_table import HashTable
 
 
 # Open csv file as a text file and get a file object
-with open("package_data.csv") as csv_file:
+with open("csv/package_data.csv") as csv_file:
     # Pass file object (csv_file) to `reader` and get an iterable reader object
     csv_reader = csv.reader(csv_file, delimiter=",")
     # print_csv()
@@ -97,21 +97,21 @@ with open("package_data.csv") as csv_file:
     def check_first_truck_second_trip():
         return first_truck_second_trip
 
-    # TEST
-    # for key in (1, 2):
-    #     v = insert_into_hash_table.get(key)
-    #     print(v)
-
-    # vs = insert_into_hash_table.get(1)
-    # print(vs)
 
 # =================================================================
 # TEST
 
-# for key in range(1):
-#     v = insert_into_hash_table.get(key)
-#     print(v)
+# Print package 1 details
+# test_value = insert_into_hash_table.get("1")
+# print(test_value)
 
+# Print all packages
+# insert_into_hash_table.print_values()
+
+# Print packages in bucket 1
+insert_into_hash_table.print_bucket(1)
+
+# print(f"map: {insert_into_hash_table.map}")
 
 # =================================================================
 #                             NOTES

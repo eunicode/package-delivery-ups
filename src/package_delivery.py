@@ -1,7 +1,9 @@
 from hash_table_instance import check_first_truck_first_trip
 from hash_table_instance import check_first_truck_second_trip
 from hash_table_instance import check_second_truck_first_trip
+from hash_table_instance import get_hash_map
 
+import distances
 from distances import check_distance
 from distances import check_time_first_truck
 from distances import check_time_second_truck
@@ -15,10 +17,7 @@ from distances import second_optimized_truck_list
 from distances import third_optimized_truck_index
 from distances import third_optimized_truck_list
 
-from hash_table_instance import get_hash_map
-
 import datetime
-import distances
 
 first_delivery = []
 second_delivery = []

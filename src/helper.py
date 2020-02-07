@@ -4,8 +4,8 @@ from hash_table_instance import get_hash_map
 def interface_print(count):
     my_str = f"""
     Package ID: {get_hash_map().get(str(count))[0]}
-    Street address: {get_hash_map().get(str(count))[2]} {get_hash_map().get(str(count))[3]} UT {get_hash_map().get(str(count))[5]}
-    Required delivery time: {get_hash_map().get(str(count))[6]}
+    Address: {get_hash_map().get(str(count))[2]} {get_hash_map().get(str(count))[3]} UT {get_hash_map().get(str(count))[5]}
+    Deadline: {get_hash_map().get(str(count))[6]}
     Package weight: {get_hash_map().get(str(count))[7]}
     Truck status: {get_hash_map().get(str(count))[9]}
     Delivery status: {get_hash_map().get(str(count))[10]}"""

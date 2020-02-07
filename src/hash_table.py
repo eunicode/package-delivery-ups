@@ -21,6 +21,7 @@ class HashTable:
         for elm in range(initial_capacity):
             self.map.append([])
 
+    # ------------------------------------------------------------------
     # private getter to create a hash key / Function to be used internally by the class
     # Space complexity is O(1)
     # Time complexity is
@@ -28,6 +29,7 @@ class HashTable:
         return int(key) % len(self.map)
         # return bucket
 
+    # ------------------------------------------------------------------
     # Insert a new package value into the hash table
     # Space complexity is O(N)
     def insert(self, key, value):
@@ -45,6 +47,7 @@ class HashTable:
             self.map[key_hash].append(key_value)
             return True
 
+    # ------------------------------------------------------------------
     # Space-time complexity is O(N)
     def update(self, key, value):
         key_hash = self._get_hash(key)
@@ -57,6 +60,7 @@ class HashTable:
         else:
             print("There was an error with updating on key: " + key)
 
+    # ------------------------------------------------------------------
     # Grab a value from the hash table
     # Space-time complexity is O(N)
     def get(self, key):
@@ -67,6 +71,7 @@ class HashTable:
                     return pair[1]
         return None
 
+    # ------------------------------------------------------------------
     # Remove a value from the hash table
     # runtime is O(N)
 
@@ -81,22 +86,54 @@ class HashTable:
                 return True
         return False
 
+    # ------------------------------------------------------------------
+    # Print all packages
+    # Time complexity = O(N^2)
+    def print_values(self):
+        my_str = f""
+        for i in range(len(self.map)):
+            for j in range(len(self.map[i])):
+                my_str += f"\n{self.map[i][j]}"
+        print(my_str)
+
+    # ------------------------------------------------------------------
+    # Print packages in specified bucket
+    # Time complexity = O(N)
+    def print_bucket(self, bucket):
+        my_str = f""
+        for i in range(len(self.map[bucket])):
+            my_str += f"\n{self.map[bucket][i]}"
+        print(my_str)
+
 
 # =================================================================
 # TEST
 
-ht = HashTable()
+# ht = HashTable()
 
-ht.insert(
-    1,
-    [1, "195 W Oakland Ave", "Salt Lake City", "UT", "84115", "10:30:00", "21", "None"],
-)
+# ht.insert(
+#     "1",
+#     [
+#         "1",
+#         "195 W Oakland Ave",
+#         "Salt Lake City",
+#         "UT",
+#         "84115",
+#         "10:30:00",
+#         "21",
+#         "None",
+#     ],
+# )
+
+# ht.insert(
+#     "2", ["2", "2530 S 500 E", "Salt Lake City", "UT", "84106", "EOD", "44", "None"]
+# )
 
 # print(f"map: {ht.map}")
 
-# for key in (1, 2):
-#     v = ht.get(key)
-#     print(v)
+# for key in ("1", "2"):
+#     value = ht.get(key)
+#     print(value)
 
 # =================================================================
 #                             NOTES

@@ -15,7 +15,7 @@ def print_csv_2():
 
 
 # Read in csv file that is the mapping of distances between locations
-with open("distance_data.csv") as csv_file:
+with open("csv/distance_data.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     # print_csv_2()
     # Convert to iterable reader object to list
@@ -23,7 +23,7 @@ with open("distance_data.csv") as csv_file:
 
 
 # Read in csv file that is the names of all possible delivery locations
-with open("location_data.csv") as csv_file_location:
+with open("csv/location_data.csv") as csv_file_location:
     csv_reader_location = csv.reader(csv_file_location, delimiter=",")
     csv_reader_location = list(csv_reader_location)
     # print_csv_2()
