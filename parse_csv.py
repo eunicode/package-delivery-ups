@@ -1,18 +1,6 @@
 import csv
 from hash_table import HashTable
 
-# Print parsed csv data
-def print_csv():
-    line_count = 0
-
-    for row in csv_reader:
-        print(
-            f"\tCol1: {row[0]} | Col2: {row[1]} | Col3: {row[2]} | Col4: {row[3]} | Col5: {row[4]} | Col6: {row[5]} | Col7: {row[6]} | Col8: {row[7]}"
-        )
-        line_count += 1
-
-    print(f"Processed {line_count} lines.")
-
 
 # Open csv file as a text file and get a file object
 with open("package_data.csv") as csv_file:
@@ -123,6 +111,7 @@ with open("package_data.csv") as csv_file:
 # for key in range(1):
 #     v = insert_into_hash_table.get(key)
 #     print(v)
+
 
 # =================================================================
 #                             NOTES
