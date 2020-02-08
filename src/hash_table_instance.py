@@ -109,7 +109,7 @@ with open("csv/package_data.csv") as csv_file:
 # insert_into_hash_table.print_values()
 
 # Print packages in bucket 1
-insert_into_hash_table.print_bucket(1)
+# insert_into_hash_table.print_bucket(1)
 
 # print(f"map: {insert_into_hash_table.map}")
 

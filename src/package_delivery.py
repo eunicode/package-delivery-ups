@@ -27,18 +27,33 @@ first_truck_distance_list = []
 second_truck_distance_list = []
 third_truck_distance_list = []
 
+# this is the time that the first truck leaves the hub
+first_time_list = ["8:00:00"]
+second_time_list = ["9:10:00"]
+third_time_list = ["11:00:00"]
+
 # the times below represent the times that each truck leaves the hub
-first_time = "8:00:00"
+first_time = "8:00:00"  # Drivers leave the hub at 8am
 second_time = "9:10:00"
 third_time = "11:00:00"
+# 9am - deadline 1
+# 10:30 - deadline 2
+# 9:05 - package arrives in hub
+# 10:20 am - time package 9 address is corrected
 
 # the operations below convert the string time into a datetime.timedelta
-(h, m, s) = first_time.split(":")
-convert_first_time = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-(h, m, s) = second_time.split(":")
-convert_second_time = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-(h, m, s) = third_time.split(":")
-convert_third_time = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+(hour, min, sec) = first_time.split(":")
+convert_first_time = datetime.timedelta(
+    hours=int(hour), minutes=int(min), seconds=int(sec)
+)
+(hour, min, sec) = second_time.split(":")
+convert_second_time = datetime.timedelta(
+    hours=int(hour), minutes=int(min), seconds=int(sec)
+)
+(hour, min, sec) = third_time.split(":")
+convert_third_time = datetime.timedelta(
+    hours=int(hour), minutes=int(min), seconds=int(sec)
+)
 
 # for loop updates the delivery status of all packages in truck 1 to when the truck leaves the station
 # counter to iterate through for loop
@@ -76,18 +91,24 @@ for index in range(len(first_optimized_truck_index())):
             int(first_optimized_truck_index()[index + 1]),
             first_truck_total_distance,
         )
+
         # calculate the distance of each package along the route
         deliver_package = check_time_first_truck(
             check_current_distance(
                 int(first_optimized_truck_index()[index]),
                 int(first_optimized_truck_index()[index + 1]),
-            )
+            ),
+            first_time_list,
         )
+
         first_optimized_truck_list()[first_truck_package_id][10] = str(deliver_package)
+
         get_hash_map().update(
             int(first_optimized_truck_list()[first_truck_package_id][0]), first_delivery
         )
+
         first_truck_package_id += 1
+
     except IndexError:
         pass
 
@@ -132,7 +153,8 @@ for index in range(len(second_optimized_truck_index())):
             check_current_distance(
                 int(second_optimized_truck_index()[index]),
                 int(second_optimized_truck_index()[index + 1]),
-            )
+            ),
+            second_time_list,
         )
         second_optimized_truck_list()[second_truck_package_id][10] = str(
             deliver_package
@@ -185,7 +207,8 @@ for index in range(len(third_optimized_truck_index())):
             check_current_distance(
                 int(third_optimized_truck_index()[index]),
                 int(third_optimized_truck_index()[index + 1]),
-            )
+            ),
+            third_time_list,
         )
         third_optimized_truck_list()[third_truck_package_id][10] = str(deliver_package)
         get_hash_map().update(

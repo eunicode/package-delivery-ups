@@ -1,32 +1,22 @@
 import csv
 import datetime
 
-# from hash_table_instance import print_csv
-
-# Print parsed csv data
-def print_csv_2():
-    line_count = 0
-    for row in csv_reader:
-        print(
-            f"\tCol1: {row[0]} | Col2: {row[1]} | Col3: {row[2]} | Col4: {row[3]} | Col5: {row[4]} | Col6: {row[5]} | Col7: {row[6]} | Col8: {row[7]}"
-        )
-        line_count += 1
-    print(f"Processed {line_count} lines.")
-
+from helper import print_csv
 
 # Read in csv file that is the mapping of distances between locations
 with open("csv/distance_data.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
-    # print_csv_2()
+
     # Convert to iterable reader object to list
     csv_reader = list(csv_reader)
-
+    # print_csv(csv_reader)
 
 # Read in csv file that is the names of all possible delivery locations
 with open("csv/location_data.csv") as csv_file_location:
     csv_reader_location = csv.reader(csv_file_location, delimiter=",")
+    # print_csv(csv_reader_location)
     csv_reader_location = list(csv_reader_location)
-    # print_csv_2()
+    # print_csv(csv_reader_location)
 
     # ------------------------------------------------------------------
     # a list of row/column values are inserted into this function.
@@ -34,9 +24,9 @@ with open("csv/location_data.csv") as csv_file_location:
     # that distance is then returned, and each iteration represents a distance between two locations
     # Space-time complexity is O(1)
     def check_distance(row_value, column_value, sum_of_distance):
-        distance = csv_reader[row_value][column_value]
+        distance = csv_reader[row_value][column_value]  # hub to garden
 
-        if distance is "":
+        if distance is "":  # garden to hub
             distance = csv_reader[column_value][row_value]
 
         sum_of_distance += float(distance)
@@ -54,52 +44,45 @@ with open("csv/location_data.csv") as csv_file_location:
 
     # ------------------------------------------------------------------
     # this is the time that the first truck leaves the hub
-    first_time_list = ["8:00:00"]
-    second_time_list = ["9:10:00"]
-    third_time_list = ["11:00:00"]
+    # first_time_list = ["8:00:00"]
+    # second_time_list = ["9:10:00"]
+    # third_time_list = ["11:00:00"]
 
     # this function takes a distance then divides it by 18. It then uses divmod to display a time, and appends 00
     # this string that is a timestamp is then split, and turned into a datetime timedelta object
     # that object is then added to sum which represents total distance for a particular truck
     # runtime of function is O(N)
 
-    def check_time_first_truck(distance):
-        new_time = distance / 18
+    def check_time(dist, time):
+        new_time = dist / 18  # miles * (1 hour/18 miles) = hours
+        # new_time = distance / 18
         distance_in_minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(new_time * 60, 60))
         final_time = distance_in_minutes + ":00"
-        first_time_list.append(final_time)
+        time.append(final_time)
+        # first_time_list.append(final_time)
+        # second_time_list.append(final_time)
+        # third_time_list.append(final_time)
         sum = datetime.timedelta()
-        for i in first_time_list:
-            (h, m, s) = i.split(":")
-            d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+
+        for t in time:
+            # for i in first_time_list:
+            # for i in third_time_list:
+            (hour, min, sec) = t.split(":")
+            d = datetime.timedelta(hours=int(hour), minutes=int(min), seconds=int(sec))
             sum += d
+
         return sum
+
+    def check_time_first_truck(distance, time_list):
+        return check_time(distance, time_list)
 
     # Repeated function for second truck
-    def check_time_second_truck(distance):
-        new_time = distance / 18
-        distance_in_minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(new_time * 60, 60))
-        final_time = distance_in_minutes + ":00"
-        second_time_list.append(final_time)
-        sum = datetime.timedelta()
-        for i in second_time_list:
-            (h, m, s) = i.split(":")
-            d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-            sum += d
-        return sum
+    def check_time_second_truck(distance, time_list):
+        return check_time(distance, time_list)
 
     # Repeated function for the third truck
-    def check_time_third_truck(distance):
-        new_time = distance / 18
-        distance_in_minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(new_time * 60, 60))
-        final_time = distance_in_minutes + ":00"
-        third_time_list.append(final_time)
-        sum = datetime.timedelta()
-        for i in third_time_list:
-            (h, m, s) = i.split(":")
-            d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-            sum += d
-        return sum
+    def check_time_third_truck(distance, time_list):
+        return check_time(distance, time_list)
 
     # ------------------------------------------------------------------
     # this function returns the time objects to use in the Packages.py file
@@ -229,13 +212,81 @@ with open("csv/location_data.csv") as csv_file_location:
 #                             NOTES
 # =================================================================
 """
+TO DO 
+Create class
+class MyDeliverySystem
+MyDeliverySystem.run()
+
+--------------------------------------------------------------------
 ValueError : I/O operation on closed file
 https://stackoverflow.com/questions/18952716/valueerror-i-o-operation-on-closed-file
 
 Outside the with block, the file is closed.
 
 --------------------------------------------------------------------
+Python Lists
+https://developers.google.com/edu/python/lists
 
+METHODS
+list.append(elem) - at end
+list.insert(index, elem) - at index
+list.extend(list2) - concat list. Alternative: `arr1 + arr2`
+list.index(elem)
+list.remove(elem)
+list.sort()
+list.reverse() - mutator
+list.pop(index) 
 
+List Slices
+slice(start, stop, step)
 
+list = ['a', 'b', 'c', 'd']
+print list[1:-1]   ## ['b', 'c']
+
+list[0:2] = 'z'    ## replace ['a', 'b'] with ['z']
+print list         ## ['z', 'c', 'd']
+
+--------------------------------------------------------------------
+How to loop with indexes in Python
+https://treyhunner.com/2016/04/how-to-loop-with-indexes-in-python/
+
+for i in range(len(presidents)):
+for num, name in enumerate(presidents, start=1):
+for header, rows in zip(headers, columns):
+
+--------------------------------------------------------------------
+CLASS METHOD / STATIC METHOD
+
+class method vs static method in Python
+https://www.geeksforgeeks.org/class-method-vs-static-method-python/
+https://www.tutorialspoint.com/class-method-vs-static-method-in-python
+
+CLASS
+- A class method receives the class as implicit first argument, just like an instance method receives the instance.
+- A class method is a method which is bound to the class and not the object of the class.
+They have the access to the state of the class as it takes a class parameter that points to the class and not the object instance.   
+- It can modify a class state that would apply across all the instances of the class. For example it can modify a class variable that will be applicable to all the instances. 
+
+STATIC
+- bound to class, not class instance
+- does not receive an implicit first argument
+- A static method can’t access or modify class state.
+
+https://stackoverflow.com/questions/136097/difference-between-staticmethod-and-classmethod
+CLASS
+intend to call it from the class rather than from a class instance
+
+STATIC
+behave like plain functions except that you can call them from an instance or the class
+used to group functions
+
+--------------------------------------------------------------------
+How to convert float into Hours Minutes Seconds?
+https://www.olgagoncalves.com/index.php/article/5196537.html
+https://docs.python.org/2/library/string.html#formatspec
+https://docs.python.org/3/library/string.html#format-string-syntax
+https://stackoverflow.com/questions/27496889/converting-a-float-to-hhmm-format/27496953#27496953
+https://stackoverflow.com/questions/134934/display-number-with-leading-zeros
+
+divmod(dividend, divisor) = (quotient, remainder)
 """

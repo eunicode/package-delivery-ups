@@ -53,16 +53,22 @@ def interface_print(count):
 
 # =================================================================
 # Print parsed csv data
-def print_csv():
+def print_csv(reader_obj):
     line_count = 0
 
-    for row in csv_reader:
-        print(
-            f"\tCol1: {row[0]} | Col2: {row[1]} | Col3: {row[2]} | Col4: {row[3]} | Col5: {row[4]} | Col6: {row[5]} | Col7: {row[6]} | Col8: {row[7]}"
-        )
+    # for row in reader_obj:
+    #     print(
+    #         f"\tCol1: {row[0]} | Col2: {row[1]} | Col3: {row[2]} | Col4: {row[3]} | Col5: {row[4]} | Col6: {row[5]} | Col7: {row[6]} | Col8: {row[7]}"
+    #     )
+    #     line_count += 1
+    for i in range(len(reader_obj)):
+        my_str = f""
+        for j in range(len(reader_obj[i])):
+            my_str += f" || {reader_obj[i][j]}"
+        print(my_str)
         line_count += 1
 
-    print(f"Processed {line_count} lines.")
+    print(f"Number of rows: {line_count}")
 
 
 # =================================================================

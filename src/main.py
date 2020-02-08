@@ -89,7 +89,7 @@ while True:
             print(IndexError)
             exit()
         except ValueError:
-            print("Invalid entry!")
+            print("Invalid entry")
             exit()
 
     # -------------------------------------------------------------------
