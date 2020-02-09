@@ -7,20 +7,20 @@ from hash_table_instance import check_second_truck_first_trip
 from hash_table_instance import get_hash_map
 from hash_table_instance import first_truck
 
-import distances
+import shortest_path
 
-from distances import check_distance
-from distances import check_time_first_truck
-from distances import check_time_second_truck
-from distances import check_time_third_truck
-from distances import check_current_distance
-from distances import calculate_shortest_distance
-from distances import first_optimized_truck_index
-from distances import first_optimized_truck_list
-from distances import second_optimized_truck_index
-from distances import second_optimized_truck_list
-from distances import third_optimized_truck_index
-from distances import third_optimized_truck_list
+from shortest_path import check_distance
+from shortest_path import check_time_first_truck
+from shortest_path import check_time_second_truck
+from shortest_path import check_time_third_truck
+from shortest_path import check_current_distance
+from shortest_path import calculate_shortest_distance
+from shortest_path import first_optimized_truck_index
+from shortest_path import first_optimized_truck_list
+from shortest_path import second_optimized_truck_index
+from shortest_path import second_optimized_truck_list
+from shortest_path import third_optimized_truck_index
+from shortest_path import third_optimized_truck_list
 
 
 first_delivery = []
@@ -88,11 +88,11 @@ for i, package in enumerate(first_truck):
 # Space-time complexity is O(N^2)
 try:
     first_variable_count = 0
-    address_book = distances.check_address()
+    address_book = shortest_path.check_address()
 
     for pkg in first_delivery:
         for location in address_book:
-            if pkg[2] == location[2]:  # If package address matches a location
+            if pkg["address"] == location[2]:  # If package address matches a location
                 first_truck_distance_list.append(
                     location[0]
                 )  # Add location ID to `first_truck_distance_list`
@@ -104,7 +104,6 @@ except IndexError:
     pass
 
 # calls to the greedy algorithm that sorts the packages in a more efficient order
-print("hi")
 calculate_shortest_distance(first_delivery, 1, 0)
 first_truck_total_distance = 0
 
@@ -129,10 +128,13 @@ for index in range(len(first_optimized_truck_index())):
             first_time_list,
         )
 
-        first_optimized_truck_list()[first_truck_package_id][10] = str(deliver_package)
+        first_optimized_truck_list()[first_truck_package_id]["delivery_status"] = str(
+            deliver_package
+        )
 
         get_hash_map().update(
-            int(first_optimized_truck_list()[first_truck_package_id][0]), first_delivery
+            int(first_optimized_truck_list()[first_truck_package_id]["package_id"]),
+            first_delivery,
         )
 
         first_truck_package_id += 1
@@ -145,7 +147,10 @@ for index in range(len(first_optimized_truck_index())):
 i = 0  # counter to iterate through for loop
 # Space-time complexity is O(N)
 for value in check_second_truck_first_trip():
-    check_second_truck_first_trip()[i][9] = departure_times["second_time"]
+    check_second_truck_first_trip()[i]["delivery_start"] = departure_times[
+        "second_time"
+    ]
+    # check_second_truck_first_trip()[i][9] = departure_times["second_time"]
     # check_second_truck_first_trip()[i][9] = second_time
     second_delivery.append(check_second_truck_first_trip()[i])
     i += 1
@@ -155,8 +160,8 @@ for value in check_second_truck_first_trip():
 try:
     second_variable_count = 0
     for k in second_delivery:
-        for j in distances.check_address():
-            if k[2] == j[2]:
+        for j in shortest_path.check_address():
+            if k["address"] == j[2]:
                 second_truck_distance_list.append(j[0])
                 second_delivery[second_variable_count][1] = j[0]
         second_variable_count += 1
@@ -186,11 +191,11 @@ for index in range(len(second_optimized_truck_index())):
             ),
             second_time_list,
         )
-        second_optimized_truck_list()[second_truck_package_id][10] = str(
+        second_optimized_truck_list()[second_truck_package_id]["delivery_status"] = str(
             deliver_package
         )
         get_hash_map().update(
-            int(second_optimized_truck_list()[second_truck_package_id][0]),
+            int(second_optimized_truck_list()[second_truck_package_id]["package_id"]),
             second_delivery,
         )
         second_truck_package_id += 1
@@ -202,7 +207,7 @@ for index in range(len(second_optimized_truck_index())):
 i = 0
 # Space-time complexity is O(N)
 for value in check_first_truck_second_trip():
-    check_first_truck_second_trip()[i][9] = departure_times["third_time"]
+    check_first_truck_second_trip()[i]["delivery_start"] = departure_times["third_time"]
     # check_first_truck_second_trip()[i][9] = third_time
     third_delivery.append(check_first_truck_second_trip()[i])
     i += 1
@@ -212,8 +217,8 @@ for value in check_first_truck_second_trip():
 try:
     third_variable_count = 0
     for k in third_delivery:
-        for j in distances.check_address():
-            if k[2] == j[2]:
+        for j in shortest_path.check_address():
+            if k["address"] == j[2]:
                 third_truck_distance_list.append(j[0])
                 third_delivery[third_variable_count][1] = j[0]
         third_variable_count += 1
@@ -242,9 +247,12 @@ for index in range(len(third_optimized_truck_index())):
             ),
             third_time_list,
         )
-        third_optimized_truck_list()[third_truck_package_id][10] = str(deliver_package)
+        third_optimized_truck_list()[third_truck_package_id]["delivery_status"] = str(
+            deliver_package
+        )
         get_hash_map().update(
-            int(third_optimized_truck_list()[third_truck_package_id][0]), third_delivery
+            int(third_optimized_truck_list()[third_truck_package_id]["package_id"]),
+            third_delivery,
         )
         third_truck_package_id += 1
     except IndexError:

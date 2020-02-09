@@ -6,12 +6,12 @@ from hash_table_instance import get_hash_map
 
 def interface_print(count):
     my_str = f"""
-    Package ID: {get_hash_map().get(str(count))[0]}
-    Address: {get_hash_map().get(str(count))[2]} {get_hash_map().get(str(count))[3]} UT {get_hash_map().get(str(count))[5]}
-    Deadline: {get_hash_map().get(str(count))[6]}
-    Package weight: {get_hash_map().get(str(count))[7]}
-    Truck status: {get_hash_map().get(str(count))[9]}
-    Delivery status: {get_hash_map().get(str(count))[10]}"""
+    Package ID: {get_hash_map().get(str(count))["package_id"]}
+    Address: {get_hash_map().get(str(count))["address"]} {get_hash_map().get(str(count))["city"]} UT {get_hash_map().get(str(count))["zip"]}
+    Deadline: {get_hash_map().get(str(count))["deadline"]}
+    Package weight: {get_hash_map().get(str(count))["weight"]}
+    Truck status: {get_hash_map().get(str(count))["delivery_start"]}
+    Delivery status: {get_hash_map().get(str(count))["delivery_status"]}"""
     print(my_str)
 
     # print(

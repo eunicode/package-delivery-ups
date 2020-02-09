@@ -19,53 +19,67 @@ with open("csv/package_data.csv") as csv_file:
     # these values are what makes up the nested dictionary inside of the Hash table
     # Space-time complexity is O(N)
     for row in csv_reader:
-        package_ID_row_value = row[0]
-        address_row_value = row[1]
-        city_row_value = row[2]
-        state_row_value = row[3]
-        zip_row_value = row[4]
-        delivery_row_value = row[5]
-        size_row_value = row[6]
-        note_row_value = row[7]
-        delivery_start = ""
-        address_location = ""
-        delivery_status = "At hub"
+        # package_ID_row_value = row[0]
+        # address_row_value = row[1]
+        # city_row_value = row[2]
+        # state_row_value = row[3]
+        # zip_row_value = row[4]
+        # delivery_row_value = row[5]
+        # size_row_value = row[6]
+        # note_row_value = row[7]
+        # delivery_start = ""
+        # address_location = ""
+        # delivery_status = "At hub"
         #
-        iterate_value = [
-            package_ID_row_value,
-            address_location,
-            address_row_value,
-            city_row_value,
-            state_row_value,
-            zip_row_value,
-            delivery_row_value,
-            size_row_value,
-            note_row_value,
-            delivery_start,
-            delivery_status,
-        ]
+        package_data = {
+            "package_id": row[0],  # 0
+            "location_id": "",  # 1
+            "address": row[1],  # 2
+            "city": row[2],  # 3
+            "state": row[3],  # 4
+            "zip": row[4],  # 5
+            "deadline": row[5],  # 6
+            "weight": row[6],  # 7
+            "note": row[7],  # 8
+            "delivery_start": "",  # 9
+            "delivery_status": "At hub",  # 10
+        }
 
-        key = package_ID_row_value
-        value = iterate_value
+        # iterate_value = [
+        #     package_ID_row_value,
+        #     address_location,
+        #     address_row_value,
+        #     city_row_value,
+        #     state_row_value,
+        #     zip_row_value,
+        #     delivery_row_value,
+        #     size_row_value,
+        #     note_row_value,
+        #     delivery_start,
+        #     delivery_status,
+        # ]
+
+        key = row[0]  # package ID
+        value = package_data
 
         # In place constraints to create a list of packages that are loaded onto the trucks
         # The data structure here focuses on moving all attributes of a package into a nested list.
         # This allows for quick lookup and sorting that can be based on every package detail
         # Below is the set of constraints that determine which packages are loaded in either of the two trucks
-        if value[6] != "EOD":
-            if "Must be delivered" in value[8] or "None" in value[8]:
+        if value["deadline"] != "EOD":
+            if "Must be delivered" in value["note"] or "None" in value["note"]:
                 # this is a list that represents the first truck
                 first_truck.append(value)
-        if value[8] == "Can only be on truck 2":
+        if value["note"] == "Can only be on truck 2":
             second_truck.append(value)
-        if "Delayed" in value[8]:
+        if "Delayed" in value["note"]:
             second_truck.append(value)
         # change the wrong address package to the correct address
-        if "84104" in value[5] and "10:30" not in value[6]:
+        if "84104" in value["zip"] and "10:30" not in value["deadline"]:
             first_truck_second_trip.append(value)
-        if "Wrong address listed" in value[8]:
-            value[2] = "410 S State St"
-            value[5] = "84111"
+        if "Wrong address listed" in value["note"]:
+            value["address"] = "410 S State St"
+            value["zip"] = "84111"
             first_truck_second_trip.append(value)
 
         if (
@@ -105,7 +119,7 @@ with open("csv/package_data.csv") as csv_file:
 # =================================================================
 # TEST
 
-# Print package 1 details
+# Print package #1 details
 # test_value = insert_into_hash_table.get("1")
 # print(test_value)
 
@@ -127,7 +141,7 @@ with open("csv/package_data.csv") as csv_file:
 # def print_truck(truck):
 #     my_str = f""
 #     for package in truck:
-#         my_str += f"{package[0]} ,"
+#         my_str += f"{package['package_id']} ,"
 #     print(my_str)
 
 
