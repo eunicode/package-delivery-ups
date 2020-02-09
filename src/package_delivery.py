@@ -1,3 +1,6 @@
+# import datetime
+from helper import str_to_timedelta
+
 from hash_table_instance import check_first_truck_first_trip
 from hash_table_instance import check_first_truck_second_trip
 from hash_table_instance import check_second_truck_first_trip
@@ -5,6 +8,7 @@ from hash_table_instance import get_hash_map
 from hash_table_instance import first_truck
 
 import distances
+
 from distances import check_distance
 from distances import check_time_first_truck
 from distances import check_time_second_truck
@@ -18,7 +22,6 @@ from distances import second_optimized_truck_list
 from distances import third_optimized_truck_index
 from distances import third_optimized_truck_list
 
-import datetime
 
 first_delivery = []
 second_delivery = []
@@ -32,37 +35,37 @@ third_truck_distance_list = []
 first_time_list = ["8:00:00"]
 second_time_list = ["9:10:00"]
 third_time_list = ["11:00:00"]
-# departure_times = {
-#     "first_time": "8:00:00",
-#     "second_time": "9:10:00",
-#     "third_time": "11:00:00"
-# }
+
+departure_times = {
+    "first_time": "8:00:00",
+    "second_time": "9:10:00",
+    "third_time": "11:00:00",
+}
 
 # the times below represent the times that each truck leaves the hub
-first_time = "8:00:00"  # Drivers leave the hub at 8am
-second_time = "9:10:00"
-third_time = "11:00:00"
+# first_time = "8:00:00"
+# Drivers leave the hub at 8am
+# second_time = "9:10:00"
+# third_time = "11:00:00"
 # 9am - deadline 1
 # 10:30 - deadline 2
 # 9:05 - package arrives in hub
 # 10:20 am - time package 9 address is corrected
 
 # the operations below convert the string time into a datetime.timedelta
-(hour, min, sec) = first_time.split(":")
-convert_first_time = datetime.timedelta(
-    hours=int(hour), minutes=int(min), seconds=int(sec)
-)
+# first_time
+convert_first_time = str_to_timedelta(departure_times["first_time"])
 
-(hour, min, sec) = second_time.split(":")
-convert_second_time = datetime.timedelta(
-    hours=int(hour), minutes=int(min), seconds=int(sec)
-)
-
-(hour, min, sec) = third_time.split(":")
-convert_third_time = datetime.timedelta(
-    hours=int(hour), minutes=int(min), seconds=int(sec)
-)
-
+# (hour, min, sec) = second_time.split(":")
+# convert_second_time = datetime.timedelta(
+#     hours=int(hour), minutes=int(min), seconds=int(sec)
+# )
+convert_second_time = str_to_timedelta(departure_times["second_time"])
+# (hour, min, sec) = third_time.split(":")
+# convert_third_time = datetime.timedelta(
+#     hours=int(hour), minutes=int(min), seconds=int(sec)
+# )
+convert_third_time = str_to_timedelta(departure_times["third_time"])
 # =================================================================
 
 # for loop updates the delivery status of all packages in truck 1 to when the truck leaves the station
@@ -142,7 +145,8 @@ for index in range(len(first_optimized_truck_index())):
 i = 0  # counter to iterate through for loop
 # Space-time complexity is O(N)
 for value in check_second_truck_first_trip():
-    check_second_truck_first_trip()[i][9] = second_time
+    check_second_truck_first_trip()[i][9] = departure_times["second_time"]
+    # check_second_truck_first_trip()[i][9] = second_time
     second_delivery.append(check_second_truck_first_trip()[i])
     i += 1
 
@@ -198,7 +202,8 @@ for index in range(len(second_optimized_truck_index())):
 i = 0
 # Space-time complexity is O(N)
 for value in check_first_truck_second_trip():
-    check_first_truck_second_trip()[i][9] = third_time
+    check_first_truck_second_trip()[i][9] = departure_times["third_time"]
+    # check_first_truck_second_trip()[i][9] = third_time
     third_delivery.append(check_first_truck_second_trip()[i])
     i += 1
 

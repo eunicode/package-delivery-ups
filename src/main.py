@@ -2,8 +2,10 @@
 
 from hash_table_instance import get_hash_map
 from package_delivery import total_distance
-import datetime
+
+# import datetime
 from helper import interface_print
+from helper import str_to_timedelta
 
 # This is the display message that is shown when the user runs the program. The interface is accessible from here
 print("Welcome to the package delivery system!\n")
@@ -35,10 +37,11 @@ while True:
     if command == "status":
         # try:
         package_status_time = input("Enter a time in the HH:MM:SS format: ")
-        (hour, min, sec) = package_status_time.split(":")
-        convert_user_time = datetime.timedelta(
-            hours=int(hour), minutes=int(min), seconds=int(sec)
-        )
+        convert_input_time = str_to_timedelta(package_status_time)
+        # (hour, min, sec) = package_status_time.split(":")
+        # convert_user_time = datetime.timedelta(
+        #     hours=int(hour), minutes=int(min), seconds=int(sec)
+        # )
 
         # Space-time complexity is O(N^2)
         for count in range(1, 41):
@@ -46,29 +49,30 @@ while True:
                 first_time = get_hash_map().get(str(count))[9]
                 second_time = get_hash_map().get(str(count))[10]
 
-                (hour, min, sec) = first_time.split(":")
-                convert_first_time = datetime.timedelta(
-                    hours=int(hour), minutes=int(min), seconds=int(sec)
-                )
-
-                (hour, min, sec) = second_time.split(":")
-                convert_second_time = datetime.timedelta(
-                    hours=int(hour), minutes=int(min), seconds=int(sec)
-                )
+                convert_first_time = str_to_timedelta(first_time)
+                # (hour, min, sec) = first_time.split(":")
+                # convert_first_time = datetime.timedelta(
+                #     hours=int(hour), minutes=int(min), seconds=int(sec)
+                # )
+                convert_second_time = str_to_timedelta(second_time)
+                # (hour, min, sec) = second_time.split(":")
+                # convert_second_time = datetime.timedelta(
+                #     hours=int(hour), minutes=int(min), seconds=int(sec)
+                # )
             except ValueError:
                 pass
 
             # First checks all packages against the given time determine if they have left the hub yet.
-            if convert_first_time >= convert_user_time:
+            if convert_first_time >= convert_input_time:
                 get_hash_map().get(str(count))[10] = "At Hub"
                 get_hash_map().get(str(count))[9] = "Leaves at " + first_time
 
                 # filler
                 interface_print(count)
 
-            elif convert_first_time <= convert_user_time:
+            elif convert_first_time <= convert_input_time:
                 # Then checks to see which packages have left the hub but have not been delivered yet
-                if convert_user_time < convert_second_time:
+                if convert_input_time < convert_second_time:
                     get_hash_map().get(str(count))[10] = "In transit"
                     get_hash_map().get(str(count))[9] = "Left at " + first_time
 
@@ -103,24 +107,25 @@ while True:
         second_time = second_time.replace("Delivered at", "")
         package_status_time = input("Enter a time in the HH:MM:SS format: ")
 
-        (h, m, s) = package_status_time.split(":")
-        convert_user_time = datetime.timedelta(
-            hours=int(h), minutes=int(m), seconds=int(s)
-        )
-
-        (hr, min, sec) = first_time.split(":")
-        print(f"hr: {hr} min: {min} sec: {sec}")
-        convert_first_time = datetime.timedelta(
-            hours=int(hr), minutes=int(min), seconds=int(sec)
-        )
-
-        (hour, minute, second) = second_time.split(":")
-        convert_second_time = datetime.timedelta(
-            hours=int(hour), minutes=int(minute), seconds=int(second)
-        )
+        convert_input_time = str_to_timedelta(package_status_time)
+        # (h, m, s) = package_status_time.split(":")
+        # convert_user_time = datetime.timedelta(
+        #     hours=int(h), minutes=int(m), seconds=int(s)
+        # )
+        convert_first_time = str_to_timedelta(first_time)
+        # (hr, min, sec) = first_time.split(":")
+        # print(f"hr: {hr} min: {min} sec: {sec}")
+        # convert_first_time = datetime.timedelta(
+        #     hours=int(hr), minutes=int(min), seconds=int(sec)
+        # )
+        convert_second_time = str_to_timedelta(second_time)
+        # (hour, minute, second) = second_time.split(":")
+        # convert_second_time = datetime.timedelta(
+        #     hours=int(hour), minutes=int(minute), seconds=int(second)
+        # )
 
         # First checks if the package has left the hub yet
-        if convert_first_time >= convert_user_time:
+        if convert_first_time >= convert_input_time:
 
             get_hash_map().get(str(count))[10] = "At Hub"
             get_hash_map().get(str(count))[9] = "Leaves at " + first_time
@@ -128,9 +133,9 @@ while True:
             # filler function
             interface_print(count)
 
-        elif convert_first_time <= convert_user_time:
+        elif convert_first_time <= convert_input_time:
             # Then checks if the package has left the hub but has not been delivered yet
-            if convert_user_time < convert_second_time:
+            if convert_input_time < convert_second_time:
                 get_hash_map().get(str(count))[10] = "In transit"
                 get_hash_map().get(str(count))[9] = "Left at " + first_time
 

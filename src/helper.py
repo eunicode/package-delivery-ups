@@ -1,3 +1,6 @@
+import re
+import datetime
+
 from hash_table_instance import get_hash_map
 
 
@@ -69,6 +72,16 @@ def print_csv(reader_obj):
         line_count += 1
 
     print(f"Number of rows: {line_count}")
+
+
+def str_to_timedelta(str):
+    # Strip all characters that are not digits or `:`
+    str = re.sub("[^0-9:]", "", str)
+    (hour, min, sec) = str.split(":")
+    return datetime.timedelta(hours=int(hour), minutes=int(min), seconds=int(sec))
+
+
+# =================================================================
 
 
 # =================================================================
