@@ -137,17 +137,15 @@ with open("csv/location_data.csv") as csv_file_location:
             current_location = new_location
 
         # section 1
-        if len(truck_distance_list) == 0:  # section 2
-            return truck_distance_list
+        # if len(truck_distance_list) == 0:  # section 2
+        #     return truck_distance_list
 
-        else:  #
-            # try:
-            # lowest_value = 50.0
-            # closest_dist = 50.0
+        # update variables
+
+        while len(truck_distance_list) > 0:
             closest_dist = 14.1  # maximum distance in distances table
             new_location = 0
 
-            # Find closest location to current location
             for index in truck_distance_list:
                 if (
                     check_current_distance(current_location, int(index[1]))
@@ -180,9 +178,10 @@ with open("csv/location_data.csv") as csv_file_location:
                             first_optimized_truck_index_list,
                             index,
                         )
-                        calculate_shortest_distance(
-                            truck_distance_list, 1, current_location
-                        )
+                        # calculate_shortest_distance(
+                        #     truck_distance_list, 1, current_location
+                        # )
+
                     elif truck_number == 2:
                         # replace
                         # second_optimized_truck.append(index)
@@ -195,9 +194,9 @@ with open("csv/location_data.csv") as csv_file_location:
                             second_optimized_truck_index_list,
                             index,
                         )
-                        calculate_shortest_distance(
-                            truck_distance_list, 2, current_location
-                        )
+                        # calculate_shortest_distance(
+                        #     truck_distance_list, 2, current_location
+                        # )
                     elif truck_number == 3:
                         # replace
                         # third_optimized_truck.append(index)
@@ -210,12 +209,11 @@ with open("csv/location_data.csv") as csv_file_location:
                             third_optimized_truck_index_list,
                             index,
                         )
-                        calculate_shortest_distance(
-                            truck_distance_list, 3, current_location
-                        )
+                        # calculate_shortest_distance(
+                        #     truck_distance_list, 3, current_location
+                        # )
 
-            # except IndexError:
-            #     pass
+        return truck_distance_list
 
     # ------------------------------------------------------------------
 
