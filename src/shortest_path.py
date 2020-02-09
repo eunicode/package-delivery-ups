@@ -130,7 +130,8 @@ with open("csv/location_data.csv") as csv_file_location:
         # Sorting algo helper function
         def manage_queue(organized_list, organized_list_index, index):
             organized_list.append(index)
-            organized_list_index.append(index[1])
+            # organized_list_index.append(index[1])
+            organized_list_index.append(index["location_id"])
             pop_value = truck_distance_list.index(index)
             truck_distance_list.pop(pop_value)
             nonlocal current_location
@@ -148,13 +149,17 @@ with open("csv/location_data.csv") as csv_file_location:
 
             for index in truck_distance_list:
                 if (
-                    check_current_distance(current_location, int(index[1]))
+                    # check_current_distance(current_location, int(index[1]))
+                    check_current_distance(current_location, int(index["location_id"]))
                     <= closest_dist
                 ):
                     closest_dist = check_current_distance(
-                        current_location, int(index[1])
+                        current_location,
+                        int(index["location_id"])
+                        # current_location, int(index[1])
                     )  # section 3
-                    new_location = int(index[1])
+                    new_location = int(index["location_id"])
+                    # new_location = int(index[1])
 
             # Add package to optimized package list
             # Remove package from packages to check
@@ -163,7 +168,8 @@ with open("csv/location_data.csv") as csv_file_location:
                 # current_location = 0
 
                 if (
-                    check_current_distance(current_location, int(index[1]))
+                    # check_current_distance(current_location, int(index[1]))
+                    check_current_distance(current_location, int(index["location_id"]))
                     == closest_dist
                 ):
                     if truck_number == 1:

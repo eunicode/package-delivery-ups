@@ -81,7 +81,8 @@ convert_third_time = str_to_timedelta(departure_times["third_time"])
 #     )  # Add package to `first_delivery` list
 #     i += 1
 for i, package in enumerate(first_truck):
-    first_truck[i][9] = "8:00:00"
+    # first_truck[i][9] = "8:00:00"
+    first_truck[i]["delivery_start"] = "8:00:00"
     first_delivery.append(first_truck[i])
 
 # this for loop compares the addresses on truck one, to the list of addresses, and adds the address index to the list
@@ -96,9 +97,11 @@ try:
                 first_truck_distance_list.append(
                     location[0]
                 )  # Add location ID to `first_truck_distance_list`
-                first_delivery[first_variable_count][1] = location[
-                    0
-                ]  # Add location ID to package data
+                # first_delivery[first_variable_count][1] = location[
+                #     0
+                # ]
+                # Add location ID to package data
+                first_delivery[first_variable_count]["location_id"] = location[0]
         first_variable_count += 1
 except IndexError:
     pass
@@ -163,7 +166,8 @@ try:
         for j in shortest_path.check_address():
             if k["address"] == j[2]:
                 second_truck_distance_list.append(j[0])
-                second_delivery[second_variable_count][1] = j[0]
+                second_delivery[second_variable_count]["location_id"] = j[0]
+                # second_delivery[second_variable_count][1] = j[0]
         second_variable_count += 1
 except IndexError:
     pass
@@ -220,7 +224,8 @@ try:
         for j in shortest_path.check_address():
             if k["address"] == j[2]:
                 third_truck_distance_list.append(j[0])
-                third_delivery[third_variable_count][1] = j[0]
+                third_delivery[third_variable_count]["location_id"] = j[0]
+                # third_delivery[third_variable_count][1] = j[0]
         third_variable_count += 1
 except IndexError:
     pass

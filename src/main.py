@@ -71,9 +71,12 @@ while True:
 
             # First checks all packages against the given time determine if they have left the hub yet.
             if convert_first_time >= convert_input_time:
-                get_hash_map().get(str(count))[9] = "Leaves at " + first_time
-
-                get_hash_map().get(str(count))[10] = "At hub"
+                # get_hash_map().get(str(count))[9] = "Leaves at " + first_time
+                get_hash_map().get(str(count))["delivery_start"] = (
+                    "Leaves at " + first_time
+                )
+                # get_hash_map().get(str(count))[10] = "At hub"
+                get_hash_map().get(str(count))["delivery_status"] = "At hub"
 
                 # filler
                 interface_print(count)
@@ -81,18 +84,28 @@ while True:
             elif convert_first_time <= convert_input_time:
                 # Then checks to see which packages have left the hub but have not been delivered yet
                 if convert_input_time < convert_second_time:
-                    get_hash_map().get(str(count))[9] = "Left at " + first_time
+                    # get_hash_map().get(str(count))[9] = "Left at " + first_time
+                    get_hash_map().get(str(count))["delivery_start"] = (
+                        "Left at " + first_time
+                    )
 
-                    get_hash_map().get(str(count))[10] = "In transit"
+                    # get_hash_map().get(str(count))[10] = "In transit"
+                    get_hash_map().get(str(count))["delivery_status"] = "In transit"
 
                     # filler
                     interface_print(count)
 
                 # Finally checks all packages that have already been delivered and displays the delivered time
                 else:
-                    get_hash_map().get(str(count))[9] = "Left at " + first_time
+                    # get_hash_map().get(str(count))[9] = "Left at " + first_time
+                    get_hash_map().get(str(count))["delivery_start"] = (
+                        "Left at " + first_time
+                    )
 
-                    get_hash_map().get(str(count))[10] = "Delivered at " + second_time
+                    # get_hash_map().get(str(count))[10] = "Delivered at " + second_time
+                    get_hash_map().get(str(count))["delivery_status"] = (
+                        "Delivered at " + second_time
+                    )
 
                     # filler
                     interface_print(count)
