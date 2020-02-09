@@ -2,6 +2,7 @@ from hash_table_instance import check_first_truck_first_trip
 from hash_table_instance import check_first_truck_second_trip
 from hash_table_instance import check_second_truck_first_trip
 from hash_table_instance import get_hash_map
+from hash_table_instance import first_truck
 
 import distances
 from distances import check_distance
@@ -31,6 +32,11 @@ third_truck_distance_list = []
 first_time_list = ["8:00:00"]
 second_time_list = ["9:10:00"]
 third_time_list = ["11:00:00"]
+# departure_times = {
+#     "first_time": "8:00:00",
+#     "second_time": "9:10:00",
+#     "third_time": "11:00:00"
+# }
 
 # the times below represent the times that each truck leaves the hub
 first_time = "8:00:00"  # Drivers leave the hub at 8am
@@ -46,37 +52,56 @@ third_time = "11:00:00"
 convert_first_time = datetime.timedelta(
     hours=int(hour), minutes=int(min), seconds=int(sec)
 )
+
 (hour, min, sec) = second_time.split(":")
 convert_second_time = datetime.timedelta(
     hours=int(hour), minutes=int(min), seconds=int(sec)
 )
+
 (hour, min, sec) = third_time.split(":")
 convert_third_time = datetime.timedelta(
     hours=int(hour), minutes=int(min), seconds=int(sec)
 )
 
+# =================================================================
+
 # for loop updates the delivery status of all packages in truck 1 to when the truck leaves the station
 # counter to iterate through for loop
-i = 0
-# Space-time complexity is O(N)
-for value in check_first_truck_first_trip():
-    check_first_truck_first_trip()[i][9] = first_time
-    first_delivery.append(check_first_truck_first_trip()[i])
-    i += 1
+# i = 0
+# # Space-time complexity is O(N)
+# for value in check_first_truck_first_trip():
+#     check_first_truck_first_trip()[i][
+#         9
+#     ] = first_time  # Update delivery start to package in first_truck
+#     first_delivery.append(
+#         check_first_truck_first_trip()[i]
+#     )  # Add package to `first_delivery` list
+#     i += 1
+for i, package in enumerate(first_truck):
+    first_truck[i][9] = "8:00:00"
+    first_delivery.append(first_truck[i])
 
-# this for loop compares the addresses on truck one to the list of addresses and adds the address index to the list
+# this for loop compares the addresses on truck one, to the list of addresses, and adds the address index to the list
 # Space-time complexity is O(N^2)
 try:
     first_variable_count = 0
-    for k in first_delivery:
-        for j in distances.check_address():
-            if k[2] == j[2]:
-                first_truck_distance_list.append(j[0])
-                first_delivery[first_variable_count][1] = j[0]
+    address_book = distances.check_address()
+
+    for pkg in first_delivery:
+        for location in address_book:
+            if pkg[2] == location[2]:  # If package address matches a location
+                first_truck_distance_list.append(
+                    location[0]
+                )  # Add location ID to `first_truck_distance_list`
+                first_delivery[first_variable_count][1] = location[
+                    0
+                ]  # Add location ID to package data
         first_variable_count += 1
 except IndexError:
     pass
+
 # calls to the greedy algorithm that sorts the packages in a more efficient order
+print("hi")
 calculate_shortest_distance(first_delivery, 1, 0)
 first_truck_total_distance = 0
 
@@ -112,6 +137,7 @@ for index in range(len(first_optimized_truck_index())):
     except IndexError:
         pass
 
+# =================================================================
 # for loop updates the delivery status of all packages in truck 2 to when they leave the station
 i = 0  # counter to iterate through for loop
 # Space-time complexity is O(N)
@@ -167,6 +193,7 @@ for index in range(len(second_optimized_truck_index())):
     except IndexError:
         pass
 
+# =================================================================
 # for loop updates the delivery status of all packages in truck 1 (second delivery) to 'In transit'
 i = 0
 # Space-time complexity is O(N)
@@ -218,6 +245,7 @@ for index in range(len(third_optimized_truck_index())):
     except IndexError:
         pass
 
+# =================================================================
 # function returns total distance of all 3 trips to calculate the distance of all packages
 # Space-time complexity is O(1)
 def total_distance():
@@ -227,3 +255,16 @@ def total_distance():
         + third_truck_total_distance
     )
     return total_distance
+
+
+# =================================================================
+#                             NOTES
+# =================================================================
+"""
+VS Code and python debugger returning error but can run in the terminal
+https://stackoverflow.com/questions/55758072/vs-code-and-python-debugger-returning-error-but-can-run-in-the-terminal
+
+launch.json
+"cwd": "${fileDirname}/<WhateverYouWant>"
+--------------------------------------------------------------------
+"""

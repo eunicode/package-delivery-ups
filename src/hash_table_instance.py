@@ -11,6 +11,7 @@ with open("csv/package_data.csv") as csv_file:
     # Calls the Hashmap class to create an object of Hashmap
     insert_into_hash_table = HashTable()
     first_truck = []  # list that represents the first truck delivery
+    # first_truck = []
     second_truck = []  # list that represents the second truck delivery
     first_truck_second_trip = []  # list that represents the final truck delivery
 
@@ -29,6 +30,7 @@ with open("csv/package_data.csv") as csv_file:
         delivery_start = ""
         address_location = ""
         delivery_status = "At hub"
+        #
         iterate_value = [
             package_ID_row_value,
             address_location,
@@ -51,10 +53,10 @@ with open("csv/package_data.csv") as csv_file:
         # This allows for quick lookup and sorting that can be based on every package detail
         # Below is the set of constraints that determine which packages are loaded in either of the two trucks
         if value[6] != "EOD":
-            if "Must" in value[8] or "None" in value[8]:
+            if "Must be delivered" in value[8] or "None" in value[8]:
                 # this is a list that represents the first truck
                 first_truck.append(value)
-        if "Can only be" in value[8]:
+        if value[8] == "Can only be on truck 2":
             second_truck.append(value)
         if "Delayed" in value[8]:
             second_truck.append(value)
@@ -65,6 +67,7 @@ with open("csv/package_data.csv") as csv_file:
             value[2] = "410 S State St"
             value[5] = "84111"
             first_truck_second_trip.append(value)
+
         if (
             value not in first_truck
             and value not in second_truck
@@ -74,6 +77,7 @@ with open("csv/package_data.csv") as csv_file:
                 first_truck_second_trip.append(value)
             else:
                 second_truck.append(value)
+
         # adds all values in csv file to to a hash table
         insert_into_hash_table.insert(key, value)
 
@@ -112,6 +116,25 @@ with open("csv/package_data.csv") as csv_file:
 # insert_into_hash_table.print_bucket(1)
 
 # print(f"map: {insert_into_hash_table.map}")
+
+# -------------------------------------------------------------------
+# See how packages are divided into trucks
+# print(f"First truck = {first_truck}")
+# print(f"Second truck = {second_truck}")
+# print(f"First truck second trip = {first_truck_second_trip}")
+
+
+# def print_truck(truck):
+#     my_str = f""
+#     for package in truck:
+#         my_str += f"{package[0]} ,"
+#     print(my_str)
+
+
+# print_truck(first_truck)
+# print_truck(second_truck)
+# print_truck(first_truck_second_trip)
+
 
 # =================================================================
 #                             NOTES

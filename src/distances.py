@@ -24,9 +24,9 @@ with open("csv/location_data.csv") as csv_file_location:
     # that distance is then returned, and each iteration represents a distance between two locations
     # Space-time complexity is O(1)
     def check_distance(row_value, column_value, sum_of_distance):
-        distance = csv_reader[row_value][column_value]  # hub to garden
+        distance = csv_reader[row_value][column_value]  # hub to location
 
-        if distance is "":  # garden to hub
+        if distance is "":  # location to hub
             distance = csv_reader[column_value][row_value]
 
         sum_of_distance += float(distance)
@@ -127,10 +127,12 @@ with open("csv/location_data.csv") as csv_file_location:
         # section 1
         if len(truck_distance_list) == 0:  # section 2
             return truck_distance_list
+
         else:  #
             try:
                 lowest_value = 50.0
                 new_location = 0
+
                 for index in truck_distance_list:
                     if (
                         check_current_distance(current_location, int(index[1]))
@@ -140,6 +142,7 @@ with open("csv/location_data.csv") as csv_file_location:
                             current_location, int(index[1])
                         )  # section 3
                         new_location = int(index[1])
+
                 for index in truck_distance_list:  # section 4
                     if (
                         check_current_distance(current_location, int(index[1]))
@@ -172,6 +175,7 @@ with open("csv/location_data.csv") as csv_file_location:
                             calculate_shortest_distance(
                                 truck_distance_list, 3, current_location
                             )
+
             except IndexError:
                 pass
 

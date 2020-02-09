@@ -25,6 +25,8 @@ class HashTable:
     # private getter to create a hash key / Function to be used internally by the class
     # Space complexity is O(1)
     # Time complexity is
+    # Hash function
+    # Time complexity = O(1)
     def _get_hash(self, key):
         return int(key) % len(self.map)
         # return bucket
