@@ -102,18 +102,18 @@ with open("csv/package_data.csv") as csv_file:
 
     # function used to grab the packages that are loaded into the first truck
     # Space-time complexity is O(1)
-    def check_first_truck_first_trip():
-        return first_truck
+    # def check_first_truck_first_trip():
+    #     return first_truck
 
     # function used to grab the packages that are loaded into the second truck
     # Space-time complexity is O(1)
-    def check_second_truck_first_trip():
-        return second_truck
+    # def check_second_truck_first_trip():
+    #     return second_truck
 
     # function used to grab the packages that are loaded into the first truck last
     # Space-time complexity is O(1)
-    def check_first_truck_second_trip():
-        return first_truck_second_trip
+    # def check_first_truck_second_trip():
+    #     return first_truck_second_trip
 
 
 # =================================================================

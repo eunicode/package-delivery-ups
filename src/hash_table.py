@@ -16,7 +16,7 @@ class HashTable:
     # Constructor
     # Time complexity is O(N)
     def __init__(self, initial_capacity=10):
-        # Chaining: initialize slots with empty lists
+        # Chaining: initialize buckets with empty lists
         self.map = []
         for elm in range(initial_capacity):
             self.map.append([])

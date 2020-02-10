@@ -1,11 +1,14 @@
 # import datetime
 from helper import str_to_timedelta
 
-from hash_table_instance import check_first_truck_first_trip
-from hash_table_instance import check_first_truck_second_trip
-from hash_table_instance import check_second_truck_first_trip
+from hash_table_instance import first_truck, second_truck, first_truck_second_trip
+
+# from hash_table_instance import check_first_truck_first_trip
+# from hash_table_instance import check_first_truck_second_trip
+
+# from hash_table_instance import check_second_truck_first_trip
 from hash_table_instance import get_hash_map
-from hash_table_instance import first_truck
+
 
 import shortest_path
 
@@ -149,13 +152,12 @@ for index in range(len(first_optimized_truck_index())):
 # for loop updates the delivery status of all packages in truck 2 to when they leave the station
 i = 0  # counter to iterate through for loop
 # Space-time complexity is O(N)
-for value in check_second_truck_first_trip():
-    check_second_truck_first_trip()[i]["delivery_start"] = departure_times[
-        "second_time"
-    ]
+for value in second_truck:
+    second_truck[i]["delivery_start"] = departure_times["second_time"]
     # check_second_truck_first_trip()[i][9] = departure_times["second_time"]
     # check_second_truck_first_trip()[i][9] = second_time
-    second_delivery.append(check_second_truck_first_trip()[i])
+    second_delivery.append(second_truck[i])
+    # second_delivery.append(check_second_truck_first_trip()[i])
     i += 1
 
 # this for loop compares the addresses on truck two to the list of addresses and adds the address index to the list
@@ -210,10 +212,13 @@ for index in range(len(second_optimized_truck_index())):
 # for loop updates the delivery status of all packages in truck 1 (second delivery) to 'In transit'
 i = 0
 # Space-time complexity is O(N)
-for value in check_first_truck_second_trip():
-    check_first_truck_second_trip()[i]["delivery_start"] = departure_times["third_time"]
+for value in first_truck_second_trip:
+    # for value in check_first_truck_second_trip():
+    first_truck_second_trip[i]["delivery_start"] = departure_times["third_time"]
+    # check_first_truck_second_trip()[i]["delivery_start"] = departure_times["third_time"]
     # check_first_truck_second_trip()[i][9] = third_time
-    third_delivery.append(check_first_truck_second_trip()[i])
+    third_delivery.append(first_truck_second_trip[i])
+    # third_delivery.append(check_first_truck_second_trip()[i])
     i += 1
 
 # this for loop compares the addresses on truck one (second delivery) to the list of addresses and adds the address index to the list

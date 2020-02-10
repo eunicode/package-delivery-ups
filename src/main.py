@@ -13,9 +13,8 @@ print("Welcome to the package delivery system!\n")
 print(f"All packages were delivered in {total_distance()} miles.")
 
 # TEST
-test = get_hash_map().get("1")  # ["delivery_start"]
-print("hi")
-print(test)
+# test = get_hash_map().get("1")  # ["delivery_start"]
+# print(test)
 
 # -------------------------------------------------------------------
 # Helper functions
