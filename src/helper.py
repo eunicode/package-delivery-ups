@@ -1,17 +1,19 @@
 import re
 import datetime
 
-from hash_table_instance import get_hash_map
+from hash_table_instance import insert_into_hash_table
+
+# from hash_table_instance import get_hash_map
 
 
 def interface_print(count):
     my_str = f"""
-    Package ID: {get_hash_map().get(str(count))["package_id"]}
-    Address: {get_hash_map().get(str(count))["address"]} {get_hash_map().get(str(count))["city"]} UT {get_hash_map().get(str(count))["zip"]}
-    Deadline: {get_hash_map().get(str(count))["deadline"]}
-    Package weight: {get_hash_map().get(str(count))["weight"]}
-    Truck status: {get_hash_map().get(str(count))["delivery_start"]}
-    Delivery status: {get_hash_map().get(str(count))["delivery_status"]}"""
+    Package ID: {insert_into_hash_table.get(str(count))["package_id"]}
+    Address: {insert_into_hash_table.get(str(count))["address"]} {insert_into_hash_table.get(str(count))["city"]} UT {insert_into_hash_table.get(str(count))["zip"]}
+    Deadline: {insert_into_hash_table.get(str(count))["deadline"]}
+    Package weight: {insert_into_hash_table.get(str(count))["weight"]}
+    Truck status: {insert_into_hash_table.get(str(count))["delivery_start"]}
+    Delivery status: {insert_into_hash_table.get(str(count))["delivery_status"]}"""
     print(my_str)
 
     # print(

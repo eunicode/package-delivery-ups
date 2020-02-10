@@ -1,19 +1,18 @@
 import csv
 from hash_table import HashTable
 
+# Calls the Hashmap class to create an object of Hashmap
+insert_into_hash_table = HashTable()
+first_truck = []  # list that represents the first truck delivery
+# first_truck = []
+second_truck = []  # list that represents the second truck delivery
+third_truck = []  # list that represents the final truck delivery
 
 # Open csv file as a text file and get a file object
 with open("csv/package_data.csv") as csv_file:
     # Pass file object (csv_file) to `reader` and get an iterable reader object
     csv_reader = csv.reader(csv_file, delimiter=",")
     # print_csv()
-
-    # Calls the Hashmap class to create an object of Hashmap
-    insert_into_hash_table = HashTable()
-    first_truck = []  # list that represents the first truck delivery
-    # first_truck = []
-    second_truck = []  # list that represents the second truck delivery
-    first_truck_second_trip = []  # list that represents the final truck delivery
 
     # Read in values from CSV file and insert them into key / value pairs
     # these values are what makes up the nested dictionary inside of the Hash table
@@ -76,19 +75,19 @@ with open("csv/package_data.csv") as csv_file:
             second_truck.append(value)
         # change the wrong address package to the correct address
         if "84104" in value["zip"] and "10:30" not in value["deadline"]:
-            first_truck_second_trip.append(value)
+            third_truck.append(value)
         if "Wrong address listed" in value["note"]:
             value["address"] = "410 S State St"
             value["zip"] = "84111"
-            first_truck_second_trip.append(value)
+            third_truck.append(value)
 
         if (
             value not in first_truck
             and value not in second_truck
-            and value not in first_truck_second_trip
+            and value not in third_truck
         ):
-            if len(second_truck) > len(first_truck_second_trip):
-                first_truck_second_trip.append(value)
+            if len(second_truck) > len(third_truck):
+                third_truck.append(value)
             else:
                 second_truck.append(value)
 
@@ -97,8 +96,8 @@ with open("csv/package_data.csv") as csv_file:
 
     # function used to get the full list of values at start of day
     # Space-time complexity is O(1)
-    def get_hash_map():
-        return insert_into_hash_table
+    # def get_hash_map():
+    #     return insert_into_hash_table
 
     # function used to grab the packages that are loaded into the first truck
     # Space-time complexity is O(1)
@@ -135,7 +134,7 @@ with open("csv/package_data.csv") as csv_file:
 # See how packages are divided into trucks
 # print(f"First truck = {first_truck}")
 # print(f"Second truck = {second_truck}")
-# print(f"First truck second trip = {first_truck_second_trip}")
+# print(f"First truck second trip = {third_truck}")
 
 
 # def print_truck(truck):
@@ -147,7 +146,7 @@ with open("csv/package_data.csv") as csv_file:
 
 # print_truck(first_truck)
 # print_truck(second_truck)
-# print_truck(first_truck_second_trip)
+# print_truck(third_truck)
 
 
 # =================================================================
@@ -161,6 +160,10 @@ https://realpython.com/python-for-loop/
 Reading and Writing CSV Files in Python
 https://realpython.com/python-csv/
 
+--------------------------------------------------------------------
+TO DO
+
+Avoid global variables
 
 """
 # -------------------------------------------------------------------

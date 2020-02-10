@@ -1,13 +1,18 @@
 # import datetime
 from helper import str_to_timedelta
 
-from hash_table_instance import first_truck, second_truck, first_truck_second_trip
+from hash_table_instance import (
+    first_truck,
+    second_truck,
+    third_truck,
+    insert_into_hash_table,
+)
 
 # from hash_table_instance import check_first_truck_first_trip
 # from hash_table_instance import check_first_truck_second_trip
 
 # from hash_table_instance import check_second_truck_first_trip
-from hash_table_instance import get_hash_map
+# from hash_table_instance import get_hash_map
 
 
 import shortest_path
@@ -35,15 +40,15 @@ second_truck_distance_list = []
 third_truck_distance_list = []
 
 # this is the time that the first truck leaves the hub
-first_time_list = ["8:00:00"]
-second_time_list = ["9:10:00"]
-third_time_list = ["11:00:00"]
-
 departure_times = {
     "first_time": "8:00:00",
     "second_time": "9:10:00",
     "third_time": "11:00:00",
 }
+
+first_time_list = [departure_times["first_time"]]
+second_time_list = [departure_times["second_time"]]
+third_time_list = [departure_times["third_time"]]
 
 # the times below represent the times that each truck leaves the hub
 # first_time = "8:00:00"
@@ -138,7 +143,7 @@ for index in range(len(first_optimized_truck_index())):
             deliver_package
         )
 
-        get_hash_map().update(
+        insert_into_hash_table.update(
             int(first_optimized_truck_list()[first_truck_package_id]["package_id"]),
             first_delivery,
         )
@@ -200,7 +205,7 @@ for index in range(len(second_optimized_truck_index())):
         second_optimized_truck_list()[second_truck_package_id]["delivery_status"] = str(
             deliver_package
         )
-        get_hash_map().update(
+        insert_into_hash_table.update(
             int(second_optimized_truck_list()[second_truck_package_id]["package_id"]),
             second_delivery,
         )
@@ -212,12 +217,12 @@ for index in range(len(second_optimized_truck_index())):
 # for loop updates the delivery status of all packages in truck 1 (second delivery) to 'In transit'
 i = 0
 # Space-time complexity is O(N)
-for value in first_truck_second_trip:
+for value in third_truck:
     # for value in check_first_truck_second_trip():
-    first_truck_second_trip[i]["delivery_start"] = departure_times["third_time"]
+    third_truck[i]["delivery_start"] = departure_times["third_time"]
     # check_first_truck_second_trip()[i]["delivery_start"] = departure_times["third_time"]
     # check_first_truck_second_trip()[i][9] = third_time
-    third_delivery.append(first_truck_second_trip[i])
+    third_delivery.append(third_truck[i])
     # third_delivery.append(check_first_truck_second_trip()[i])
     i += 1
 
@@ -260,7 +265,7 @@ for index in range(len(third_optimized_truck_index())):
         third_optimized_truck_list()[third_truck_package_id]["delivery_status"] = str(
             deliver_package
         )
-        get_hash_map().update(
+        insert_into_hash_table.update(
             int(third_optimized_truck_list()[third_truck_package_id]["package_id"]),
             third_delivery,
         )
@@ -279,6 +284,15 @@ def total_distance():
     )
     return total_distance
 
+
+# =================================================================
+# TESTS
+
+# print(first_truck_total_distance)
+# truck_location_list = first_optimized_truck_index()
+# print(truck_location_list)
+# truck_package_list = first_optimized_truck_list()
+# print(truck_package_list)
 
 # =================================================================
 #                             NOTES
