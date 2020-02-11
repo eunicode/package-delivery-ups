@@ -1,119 +1,80 @@
 import csv
 from hash_table import HashTable
 
-# Calls the Hashmap class to create an object of Hashmap
+# Create hash table to hold all the package data
 insert_into_hash_table = HashTable()
-first_truck = []  # list that represents the first truck delivery
-# first_truck = []
-second_truck = []  # list that represents the second truck delivery
-third_truck = []  # list that represents the final truck delivery
+# Packages that must be delivered together
+conjoined_pkgs = ["13", "14", "15", "16", "19", "20"]
+first_truck = []
+second_truck = []
+third_truck = []
 
 # Open csv file as a text file and get a file object
 with open("csv/package_data.csv") as csv_file:
     # Pass file object (csv_file) to `reader` and get an iterable reader object
-    csv_reader = csv.reader(csv_file, delimiter=",")
+    # `csv_reader_pkg` takes O(N) space since its size is proportional to its input, the csv package data.
+    csv_reader_pkg = csv.reader(csv_file, delimiter=",")
     # print_csv()
 
-    # Read in values from CSV file and insert them into key / value pairs
-    # these values are what makes up the nested dictionary inside of the Hash table
-    # Space-time complexity is O(N)
-    for row in csv_reader:
-        # package_ID_row_value = row[0]
-        # address_row_value = row[1]
-        # city_row_value = row[2]
-        # state_row_value = row[3]
-        # zip_row_value = row[4]
-        # delivery_row_value = row[5]
-        # size_row_value = row[6]
-        # note_row_value = row[7]
-        # delivery_start = ""
-        # address_location = ""
-        # delivery_status = "At hub"
-        #
-        package_data = {
-            "package_id": row[0],  # 0
-            "location_id": "",  # 1
-            "address": row[1],  # 2
-            "city": row[2],  # 3
-            "state": row[3],  # 4
-            "zip": row[4],  # 5
-            "deadline": row[5],  # 6
-            "weight": row[6],  # 7
-            "note": row[7],  # 8
-            "delivery_start": "",  # 9
-            "delivery_status": "At hub",  # 10
+    # In a single pass, we add csv package data to our hash table, and load packages into trucks.
+    # Time complexity is O(N^2) because of the for loop, and an implicit inner for loop
+    # inside the outer for loop.
+    # This for loop causes our hash table variable to take O(N) space because the data we add to the
+    # hash table is proportional to the input, the csv package data.
+    for row in csv_reader_pkg:
+        # Copy csv package data into a dictionary.
+        pkg_data = {
+            "package_id": row[0],
+            "location_id": "",
+            "address": row[1],
+            "city": row[2],
+            "state": row[3],
+            "zip": row[4],
+            "deadline": row[5],
+            "weight": row[6],
+            "note": row[7],
+            "delivery_start": "",
+            "delivery_status": "At hub",
         }
 
-        # iterate_value = [
-        #     package_ID_row_value,
-        #     address_location,
-        #     address_row_value,
-        #     city_row_value,
-        #     state_row_value,
-        #     zip_row_value,
-        #     delivery_row_value,
-        #     size_row_value,
-        #     note_row_value,
-        #     delivery_start,
-        #     delivery_status,
-        # ]
+        # Divide packages into trucks according to the restrictions.
+        if pkg_data["note"] == "Can only be on truck 2":
+            second_truck.append(pkg_data)
+        if pkg_data["package_id"] in conjoined_pkgs:
+            if pkg_data not in first_truck:
+                first_truck.append(pkg_data)
+        if "9:00" in pkg_data["deadline"]:
+            if pkg_data not in first_truck:
+                first_truck.append(pkg_data)
+        if "10:30" in pkg_data["deadline"]:  # Todo: make more intelligent
+            if pkg_data not in first_truck:
+                first_truck.append(pkg_data)
+        if "9:05" in pkg_data["note"]:
+            second_truck.append(pkg_data)
+        if "84104" in pkg_data["zip"]:
+            if "10:30" not in pkg_data["deadline"]:
+                third_truck.append(pkg_data)
+        if "Wrong address" in pkg_data["note"]:
+            pkg_data["address"] = "410 S State St"
+            pkg_data["zip"] = "84111"
+            third_truck.append(pkg_data)
 
-        key = row[0]  # package ID
-        value = package_data
-
-        # In place constraints to create a list of packages that are loaded onto the trucks
-        # The data structure here focuses on moving all attributes of a package into a nested list.
-        # This allows for quick lookup and sorting that can be based on every package detail
-        # Below is the set of constraints that determine which packages are loaded in either of the two trucks
-        if value["deadline"] != "EOD":
-            if "Must be delivered" in value["note"] or "None" in value["note"]:
-                # this is a list that represents the first truck
-                first_truck.append(value)
-        if value["note"] == "Can only be on truck 2":
-            second_truck.append(value)
-        if "Delayed" in value["note"]:
-            second_truck.append(value)
-        # change the wrong address package to the correct address
-        if "84104" in value["zip"] and "10:30" not in value["deadline"]:
-            third_truck.append(value)
-        if "Wrong address listed" in value["note"]:
-            value["address"] = "410 S State St"
-            value["zip"] = "84111"
-            third_truck.append(value)
-
+        # Add remaining packages into trucks with the least number of packages
         if (
-            value not in first_truck
-            and value not in second_truck
-            and value not in third_truck
+            pkg_data not in first_truck
+            and pkg_data not in second_truck
+            and pkg_data not in third_truck
         ):
             if len(second_truck) > len(third_truck):
-                third_truck.append(value)
+                third_truck.append(pkg_data)
             else:
-                second_truck.append(value)
+                second_truck.append(pkg_data)
 
-        # adds all values in csv file to to a hash table
+        key = row[0]  # package ID
+        value = pkg_data
+
+        # Add values to hash table
         insert_into_hash_table.insert(key, value)
-
-    # function used to get the full list of values at start of day
-    # Space-time complexity is O(1)
-    # def get_hash_map():
-    #     return insert_into_hash_table
-
-    # function used to grab the packages that are loaded into the first truck
-    # Space-time complexity is O(1)
-    # def check_first_truck_first_trip():
-    #     return first_truck
-
-    # function used to grab the packages that are loaded into the second truck
-    # Space-time complexity is O(1)
-    # def check_second_truck_first_trip():
-    #     return second_truck
-
-    # function used to grab the packages that are loaded into the first truck last
-    # Space-time complexity is O(1)
-    # def check_first_truck_second_trip():
-    #     return first_truck_second_trip
-
 
 # =================================================================
 # TEST
@@ -136,13 +97,11 @@ with open("csv/package_data.csv") as csv_file:
 # print(f"Second truck = {second_truck}")
 # print(f"First truck second trip = {third_truck}")
 
-
 # def print_truck(truck):
 #     my_str = f""
 #     for package in truck:
 #         my_str += f"{package['package_id']} ,"
 #     print(my_str)
-
 
 # print_truck(first_truck)
 # print_truck(second_truck)
@@ -164,6 +123,7 @@ https://realpython.com/python-csv/
 TO DO
 
 Avoid global variables
-
+Find something better than if-statements to divide packages into trucks. 
+A package can satisfy multiple if conditions.
 """
 # -------------------------------------------------------------------

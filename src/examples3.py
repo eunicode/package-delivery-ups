@@ -1,6 +1,6 @@
 first_optimized_truck_index = [
-    "0",
-    "20",
+    "0",  # hub
+    "20",  # location id of first package
     "21",
     "21",
     "21",

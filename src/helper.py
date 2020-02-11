@@ -1,11 +1,10 @@
-import re
+import re  # Regex
 import datetime
 
 from hash_table_instance import insert_into_hash_table
 
-# from hash_table_instance import get_hash_map
-
-
+# -------------------------------------------------------------------
+# Print package data - multiple line
 def interface_print(count):
     my_str = f"""
     Package ID: {insert_into_hash_table.get(str(count))["package_id"]}
@@ -16,56 +15,20 @@ def interface_print(count):
     Delivery status: {insert_into_hash_table.get(str(count))["delivery_status"]}"""
     print(my_str)
 
-    # print(
-    #     """
-    # ID: {}
-    # Address: {} {} UT
-    # Zipcode: {}
-    # Deadline: {}
-    # Weight: {}
-    # Delivery Status: {}\
-    # """
-    # ).format(
-    #     get_hash_map().get(str(count))[0],
-    #     get_hash_map().get(str(count))[2],
-    #     get_hash_map().get(str(count))[3],
-    #     get_hash_map().get(str(count))[4],
-    #     get_hash_map().get(str(count))[5],
-    #     get_hash_map().get(str(count))[6],
-    #     get_hash_map().get(str(count))[7],
-    #     get_hash_map().get(str(count))[9],
-    #     get_hash_map().get(str(count))[10],
-    # )
+
+# -------------------------------------------------------------------
+# Print package data - single line
+def interface_print_single(count):
+    my_str = f"""
+    Package ID: {insert_into_hash_table.get(str(count))["package_id"]} | Address: {insert_into_hash_table.get(str(count))["address"]} {insert_into_hash_table.get(str(count))["city"]} UT {insert_into_hash_table.get(str(count))["zip"]} | Deadline: {insert_into_hash_table.get(str(count))["deadline"]} | Package weight: {insert_into_hash_table.get(str(count))["weight"]} | Truck status: {insert_into_hash_table.get(str(count))["delivery_start"]} | Delivery status: {insert_into_hash_table.get(str(count))["delivery_status"]}"""
+    print(my_str)
 
 
-# print(
-#     "Package ID:",
-#     get_hash_map().get(str(count))[0],
-#     "   Street address:",
-#     get_hash_map().get(str(count))[2],
-#     get_hash_map().get(str(count))[3],
-#     get_hash_map().get(str(count))[4],
-#     get_hash_map().get(str(count))[5],
-#     "  Required delivery time:",
-#     get_hash_map().get(str(count))[6],
-#     " Package weight:",
-#     get_hash_map().get(str(count))[7],
-#     "  Truck status:",
-#     get_hash_map().get(str(count))[9],
-#     "  Delivery status:",
-#     get_hash_map().get(str(count))[10],
-# )
-
-# =================================================================
+# -------------------------------------------------------------------
 # Print parsed csv data
 def print_csv(reader_obj):
     line_count = 0
 
-    # for row in reader_obj:
-    #     print(
-    #         f"\tCol1: {row[0]} | Col2: {row[1]} | Col3: {row[2]} | Col4: {row[3]} | Col5: {row[4]} | Col6: {row[5]} | Col7: {row[6]} | Col8: {row[7]}"
-    #     )
-    #     line_count += 1
     for i in range(len(reader_obj)):
         my_str = f""
         for j in range(len(reader_obj[i])):
@@ -76,14 +39,13 @@ def print_csv(reader_obj):
     print(f"Number of rows: {line_count}")
 
 
+# -------------------------------------------------------------------
+# Convert string to timedelta
 def str_to_timedelta(str):
     # Strip all characters that are not digits or `:`
     str = re.sub("[^0-9:]", "", str)
     (hour, min, sec) = str.split(":")
     return datetime.timedelta(hours=int(hour), minutes=int(min), seconds=int(sec))
-
-
-# =================================================================
 
 
 # =================================================================

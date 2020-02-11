@@ -1,9 +1,3 @@
-# class HashTableEntry:
-#     def __init__(self, key, item):
-#         self.key = key
-#         self.item = item
-
-
 class HashTable:
     """
     Hash table
@@ -16,16 +10,13 @@ class HashTable:
     # Constructor
     # Time complexity is O(N)
     def __init__(self, initial_capacity=10):
-        # Chaining: initialize buckets with empty lists
         self.map = []
+        # Chaining: initialize buckets with empty lists
         for elm in range(initial_capacity):
             self.map.append([])
 
     # ------------------------------------------------------------------
-    # private getter to create a hash key / Function to be used internally by the class
-    # Space complexity is O(1)
-    # Time complexity is
-    # Hash function
+    # Hash function that is used internally by the class
     # Time complexity = O(1)
     def _get_hash(self, key):
         return int(key) % len(self.map)

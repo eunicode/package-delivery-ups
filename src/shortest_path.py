@@ -6,11 +6,11 @@ from helper import str_to_timedelta
 
 # Read in csv file that is the mapping of distances between locations
 with open("csv/distance_data.csv") as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=",")
-
     # Convert to iterable reader object to list
-    csv_reader = list(csv_reader)
-    # print_csv(csv_reader)
+    # CSV_READER = list(csv.reader(csv_file, delimiter=","))
+    csv_reader_dist = csv.reader(csv_file, delimiter=",")
+    csv_reader_dist = list(csv_reader_dist)
+    # print_csv(csv_reader_dist)
 
 # Read in csv file that is the names of all possible delivery locations
 with open("csv/location_data.csv") as csv_file_location:
@@ -25,10 +25,10 @@ with open("csv/location_data.csv") as csv_file_location:
     # that distance is then returned, and each iteration represents a distance between two locations
     # Space-time complexity is O(1)
     def check_distance(row_value, column_value, sum_of_distance):
-        distance = csv_reader[row_value][column_value]  # hub to location
+        distance = csv_reader_dist[row_value][column_value]  # hub to location
 
         if distance is "":  # location to hub
-            distance = csv_reader[column_value][row_value]
+            distance = csv_reader_dist[column_value][row_value]
 
         sum_of_distance += float(distance)
         return sum_of_distance
@@ -36,10 +36,10 @@ with open("csv/location_data.csv") as csv_file_location:
     # this function is very similar to the function above but returns a current distance
     # Space-time complexity is O(1)
     def check_current_distance(row_value, column_value):
-        distance = csv_reader[row_value][column_value]
+        distance = csv_reader_dist[row_value][column_value]
 
         if distance is "":
-            distance = csv_reader[column_value][row_value]
+            distance = csv_reader_dist[column_value][row_value]
 
         return float(distance)
 
@@ -89,8 +89,8 @@ with open("csv/location_data.csv") as csv_file_location:
     # ------------------------------------------------------------------
     # this function returns the time objects to use in the Packages.py file
     # Space-time complexity is O(1)
-    def check_address():
-        return csv_reader_location
+    # def check_address():
+    #     return csv_reader_location
 
     # ------------------------------------------------------------------
     # these lists represent the sorted trucks that are put in order of efficiency in the function below

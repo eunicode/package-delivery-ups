@@ -1,13 +1,8 @@
 # Eunice Park ID: #001128345
 
 from hash_table_instance import insert_into_hash_table
-
-# from hash_table_instance import get_hash_map
 from package_delivery import total_distance
-
-# import datetime
-from helper import interface_print
-from helper import str_to_timedelta
+from helper import interface_print, str_to_timedelta, interface_print_single
 
 # This is the display message that is shown when the user runs the program. The interface is accessible from here
 print("Welcome to the package delivery system!\n")
@@ -17,9 +12,6 @@ print(f"All packages were delivered in {total_distance()} miles.")
 # TEST
 # test = insert_into_hash_table.get("1")  # ["delivery_start"]
 # print(test)
-
-# -------------------------------------------------------------------
-# Helper functions
 
 # -------------------------------------------------------------------
 while True:
