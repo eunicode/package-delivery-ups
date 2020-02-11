@@ -75,16 +75,16 @@ with open("csv/location_data.csv") as csv_file_location:
 
         return sum
 
-    def check_time_first_truck(distance, time_list):
-        return check_time(distance, time_list)
+    # def check_time_first_truck(distance, time_list):
+    #     return check_time(distance, time_list)
 
     # Repeated function for second truck
-    def check_time_second_truck(distance, time_list):
-        return check_time(distance, time_list)
+    # def check_time_second_truck(distance, time_list):
+    #     return check_time(distance, time_list)
 
     # Repeated function for the third truck
-    def check_time_third_truck(distance, time_list):
-        return check_time(distance, time_list)
+    # def check_time_third_truck(distance, time_list):
+    #     return check_time(distance, time_list)
 
     # ------------------------------------------------------------------
     # this function returns the time objects to use in the Packages.py file
