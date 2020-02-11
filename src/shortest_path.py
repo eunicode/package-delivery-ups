@@ -226,32 +226,32 @@ with open("csv/location_data.csv") as csv_file_location:
     first_optimized_truck_index_list.insert(0, "0")
 
     # Space-time complexity is O(1)
-    def first_optimized_truck_index():
-        return first_optimized_truck_index_list
+    # def first_optimized_truck_index():
+    #     return first_optimized_truck_index_list
 
     # Space-time complexity is O(1)
-    def first_optimized_truck_list():
-        return first_optimized_truck
+    # def first_optimized_truck_list():
+    #     return first_optimized_truck
 
     second_optimized_truck_index_list.insert(0, "0")
 
     # Space-time complexity is O(1)
-    def second_optimized_truck_index():
-        return second_optimized_truck_index_list
+    # def second_optimized_truck_index():
+    #     return second_optimized_truck_index_list
 
     # Space-time complexity is O(1)
-    def second_optimized_truck_list():
-        return second_optimized_truck
+    # def second_optimized_truck_list():
+    #     return second_optimized_truck
 
     third_optimized_truck_index_list.insert(0, "0")
 
     # Space-time complexity is O(1)
-    def third_optimized_truck_index():
-        return third_optimized_truck_index_list
+    # def third_optimized_truck_index():
+    #     return third_optimized_truck_index_list
 
     # Space-time complexity is O(1)
-    def third_optimized_truck_list():
-        return third_optimized_truck
+    # def third_optimized_truck_list():
+    #     return third_optimized_truck
 
 
 # =================================================================

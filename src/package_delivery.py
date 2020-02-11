@@ -25,12 +25,18 @@ from shortest_path import (
     # check_time_third_truck,
     check_current_distance,
     calculate_shortest_distance,
-    first_optimized_truck_index,
-    first_optimized_truck_list,
-    second_optimized_truck_index,
-    second_optimized_truck_list,
-    third_optimized_truck_index,
-    third_optimized_truck_list,
+    # first_optimized_truck_index,
+    first_optimized_truck_index_list,
+    # first_optimized_truck_list,
+    first_optimized_truck,
+    # second_optimized_truck_index,
+    second_optimized_truck_index_list,
+    # second_optimized_truck_list,
+    second_optimized_truck,
+    # third_optimized_truck_index,
+    third_optimized_truck_index_list,
+    # third_optimized_truck_list,
+    third_optimized_truck,
     csv_reader_location as address_book,
 )
 
@@ -97,29 +103,27 @@ def find_dist(
     time_list,
     # check_time,
 ):
-    for index in range(len(opt_truck_idx())):
-        if index == len(opt_truck_idx()) - 1:
+    for index in range(len(opt_truck_idx)):
+        if index == len(opt_truck_idx) - 1:
             break
         # try:
         # calculate the total distance of the truck
         truck_tot_dist = check_distance(
-            int(opt_truck_idx()[index]),
-            int(opt_truck_idx()[index + 1]),
-            truck_tot_dist,
+            int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]), truck_tot_dist,
         )
 
         # calculate the distance of each package along the route
         deliver_package = check_time(
             check_current_distance(
-                int(opt_truck_idx()[index]), int(opt_truck_idx()[index + 1]),
+                int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]),
             ),
             time_list,
         )
 
-        opt_truck_list()[truck_pkg_id]["delivery_status"] = str(deliver_package)
+        opt_truck_list[truck_pkg_id]["delivery_status"] = str(deliver_package)
 
         insert_into_hash_table.update(
-            int(opt_truck_list()[truck_pkg_id]["package_id"]), delivery,
+            int(opt_truck_list[truck_pkg_id]["package_id"]), delivery,
         )
 
         truck_pkg_id += 1
@@ -165,9 +169,9 @@ calculate_shortest_distance(first_delivery, 1, 0)
 # first_truck_package_id = 0
 
 first_truck_total_distance = find_dist(
-    first_optimized_truck_index,
+    first_optimized_truck_index_list,
     first_truck_total_distance,
-    first_optimized_truck_list,
+    first_optimized_truck,
     first_delivery,
     first_truck_package_id,
     first_time_list,
@@ -225,9 +229,9 @@ calculate_shortest_distance(second_delivery, 2, 0)
 # second_truck_package_id = 0
 
 second_truck_total_distance = find_dist(
-    second_optimized_truck_index,
+    second_optimized_truck_index_list,
     second_truck_total_distance,
-    second_optimized_truck_list,
+    second_optimized_truck,
     second_delivery,
     second_truck_package_id,
     second_time_list,
@@ -277,9 +281,9 @@ calculate_shortest_distance(third_delivery, 3, 0)
 # Space-time complexity is O(N)
 
 third_truck_total_distance = find_dist(
-    third_optimized_truck_index,
+    third_optimized_truck_index_list,
     third_truck_total_distance,
-    third_optimized_truck_list,
+    third_optimized_truck,
     third_delivery,
     third_truck_package_id,
     third_time_list,
@@ -349,10 +353,21 @@ print(first_truck_package_id)
 #                             NOTES
 # =================================================================
 """
+TO DO
+
+Get rid of globals. Or package them in an array. 
+Find a better way to initialize global primitive variables, pass them as arguments to functions,
+and then update them. Currently reassigning values after calling function.
+
+--------------------------------------------------------------------
 VS Code and python debugger returning error but can run in the terminal
 https://stackoverflow.com/questions/55758072/vs-code-and-python-debugger-returning-error-but-can-run-in-the-terminal
 
 launch.json
 "cwd": "${fileDirname}/<WhateverYouWant>"
+
 --------------------------------------------------------------------
+Functions have their own scope. Functions have their own variables. 
+You can pass a global primitive variable as an argument, but the function will create its own variable 
+that is initialized to that primitive value. It does not mutate the global primitive variable.
 """
