@@ -50,20 +50,14 @@ class HashTable:
     def update(self, key, value):
         hash_value = self._hash_fxn(key)
 
-        for pkg_pair in self.bucket_list[hash_value]:
+        # Search for package ID in bucket's subcontainer
+        for i, pkg_pair in enumerate(self.bucket_list[hash_value]):
             if pkg_pair[0] == key:
                 pkg_pair[1] = value
-                # print("hi")
-                # print(pkg_pair[1])
-        # print("update was run")
-        # if self.bucket_list[key_hash] is not None:
-        #     for pair in self.bucket_list[key_hash]:
-        #         if pair[0] == key:
-        #             pair[1] = value
-        #             print(pair[1])
-        #             # return True
-        # else:
-        #     print("There was an error with updating on key: " + key)
+                break
+            # If we can't find the package ID in bucket, the package doesn't exist
+            if i == len(self.bucket_list[hash_value]) - 1 and pkg_pair[0] != key:
+                assert False, "Package does not exist!"
 
     # ------------------------------------------------------------------
     # Method to remove a package from the hash table
@@ -71,13 +65,10 @@ class HashTable:
     def delete(self, key):
         key_hash = self._hash_fxn(key)
 
-        # if self.bucket_list[key_hash] is None:
-        #     return False
+        # Search for package ID in bucket's subcontainer, delete package if found
         for i in range(0, len(self.bucket_list[key_hash])):
             if self.bucket_list[key_hash][i][0] == key:
                 self.bucket_list[key_hash].pop(i)
-                # return True
-        # return False
 
     # ------------------------------------------------------------------
     # Print all packages

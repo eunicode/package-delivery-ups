@@ -4,14 +4,10 @@ from hash_table_instance import ht_pkgs
 from package_delivery import total_distance
 from helper import interface_print, str_to_timedelta, interface_print_single
 
-# This is the display message that is shown when the user runs the program. The interface is accessible from here
+# Interface welcome
 print("Welcome to the package delivery system!\n")
-# print("All packages were delivered in {} miles.".format(total_distance()))
-print(f"All packages were delivered in {total_distance()} miles.")
 
-# TEST
-# test = ht_pkgs.get("1")  # ["delivery_start"]
-# print(test)
+print(f"All packages were delivered in {total_distance()} miles.")
 
 # -------------------------------------------------------------------
 while True:
