@@ -1,4 +1,3 @@
-# import datetime
 from helper import str_to_timedelta
 
 from hash_table_instance import (
@@ -8,39 +7,21 @@ from hash_table_instance import (
     ht_pkgs,
 )
 
-# from hash_table_instance import check_first_truck_first_trip
-# from hash_table_instance import check_first_truck_second_trip
-
-# from hash_table_instance import check_second_truck_first_trip
-# from hash_table_instance import get_hash_map
-
-
-# import shortest_path
-
 from shortest_path import (
     check_distance,
     check_time,
-    # check_time_first_truck,
-    # check_time_second_truck,
-    # check_time_third_truck,
     check_current_distance,
     calculate_shortest_distance,
-    # first_optimized_truck_index,
     first_optimized_truck_index_list,
-    # first_optimized_truck_list,
     first_optimized_truck,
-    # second_optimized_truck_index,
     second_optimized_truck_index_list,
-    # second_optimized_truck_list,
     second_optimized_truck,
-    # third_optimized_truck_index,
     third_optimized_truck_index_list,
-    # third_optimized_truck_list,
     third_optimized_truck,
     csv_reader_location as address_book,
 )
 
-
+# ------------------------------------------------------------------
 first_delivery = []
 second_delivery = []
 third_delivery = []
@@ -49,7 +30,6 @@ first_truck_distance_list = []
 second_truck_distance_list = []
 third_truck_distance_list = []
 
-# this is the time that the first truck leaves the hub
 departure_times = {
     "first_time": "8:00:00",
     "second_time": "9:10:00",
@@ -67,22 +47,15 @@ second_truck_package_id = 0
 third_truck_total_distance = 0
 third_truck_package_id = 0
 
-# the operations below convert the string time into a datetime.timedelta
-# first_time
 convert_first_time = str_to_timedelta(departure_times["first_time"])
 
-# (hour, min, sec) = second_time.split(":")
-# convert_second_time = datetime.timedelta(
-#     hours=int(hour), minutes=int(min), seconds=int(sec)
-# )
 convert_second_time = str_to_timedelta(departure_times["second_time"])
-# (hour, min, sec) = third_time.split(":")
-# convert_third_time = datetime.timedelta(
-#     hours=int(hour), minutes=int(min), seconds=int(sec)
-# )
+
 convert_third_time = str_to_timedelta(departure_times["third_time"])
 
-
+# ------------------------------------------------------------------
+# Function to map an address to a location ID, and add the location ID to a location ID list
+# Time complexity is O(N^2)
 def find_loc_id(delivery, dist_list):
     for i, pkg in enumerate(delivery):
         for location in address_book:
@@ -92,28 +65,28 @@ def find_loc_id(delivery, dist_list):
                 dist_list.append(location[0])  # loc id
                 # Add location ID to package data
                 delivery[i]["location_id"] = location[0]
+                break
 
 
+# ------------------------------------------------------------------
+# Function to find the distances between locations, add the distances up
+# Time complexity = O(N^2)
 def find_dist(
-    opt_truck_idx,
-    truck_tot_dist,
-    opt_truck_list,
-    delivery,
-    truck_pkg_id,
-    time_list,
-    # check_time,
+    opt_truck_idx, truck_tot_dist, opt_truck_list, delivery, truck_pkg_id, time_list,
 ):
     for index in range(len(opt_truck_idx)):
         # If we are at the last location, exit for loop
         if index == len(opt_truck_idx) - 1:
             break
-        # try:
-        # calculate the total distance of the truck
+
+        # Calculate the total distance traveled
+        # Time complexity = O(1)
         truck_tot_dist = check_distance(
             int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]), truck_tot_dist,
         )
 
-        # calculate the distance of each package along the route
+        # Calculate accumulated time. Also calculate and store time intervals.
+        # Time complexity = O(N)
         deliver_package = check_time(
             check_current_distance(
                 int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]),
@@ -121,42 +94,35 @@ def find_dist(
             time_list,
         )
 
+        # Update the delivery time
         opt_truck_list[truck_pkg_id]["delivery_status"] = str(deliver_package)
 
-        # ht_pkgs.update(
-        #     opt_truck_list[truck_pkg_id]["package_id"], opt_truck_list[truck_pkg_id],
-        # )
-        # ht_pkgs.update(
-        #     int(opt_truck_list[truck_pkg_id]["package_id"]), delivery,
-        # )
+        ht_pkgs.update(
+            opt_truck_list[truck_pkg_id]["package_id"], opt_truck_list[truck_pkg_id],
+        )
 
         truck_pkg_id += 1
 
     return truck_tot_dist
 
 
-# =================================================================
-
-# for loop updates the delivery status of all packages in truck 1 to when the truck leaves the station
-# Space-time complexity is O(N)
-# In a single pass, update departure time for packages in truck 1,
-# and add packages to `first_delivery`
+# ------------------------------------------------------------------
+# In a single pass, update departure time for packages in truck 1, and add packages to `first_delivery`
+# Time complexity = O(N)
 for i, package in enumerate(first_truck):
     first_truck[i]["delivery_start"] = departure_times["first_time"]
     first_delivery.append(first_truck[i])
 
-# this for loop compares the addresses on truck one, to the list of addresses, and adds the address index to the list
-# Space-time complexity is O(N^2)
+# Map an address to a location ID, and add the location ID to a location ID list
 find_loc_id(first_delivery, first_truck_distance_list)
 
-# calls to the greedy algorithm that sorts the packages in a more efficient order
+# Find a sequence of packages that minimizes the distance traveled
 calculate_shortest_distance(first_delivery, 1, 0)
-# first_truck_total_distance = 0
+
 
 # this for loop takes the values in the first truck and runs them through the distance functions in the distances.py file
-# Space-time complexity is O(N)
-# first_truck_package_id = 0
 
+# Find the distances between locations, and to add the distances up
 first_truck_total_distance = find_dist(
     first_optimized_truck_index_list,
     first_truck_total_distance,
@@ -164,28 +130,22 @@ first_truck_total_distance = find_dist(
     first_delivery,
     first_truck_package_id,
     first_time_list,
-    # check_time_first_truck,
 )
 
-# =================================================================
-# for loop updates the delivery status of all packages in truck 2 to when they leave the station
-# Space-time complexity is O(N)
+# ------------------------------------------------------------------
+# In a single pass, update departure time for packages in truck 2, and add packages to `second_delivery`
+# Time complexity = O(N)
 for i, pkg in enumerate(second_truck):
     second_truck[i]["delivery_start"] = departure_times["second_time"]
     second_delivery.append(second_truck[i])
 
-# this for loop compares the addresses on truck two to the list of addresses and adds the address index to the list
-# Space-time complexity is O(N^2)
+# Map an address to a location ID, and add the location ID to a location ID list
 find_loc_id(second_delivery, second_truck_distance_list)
 
-# calls to the greedy algorithm that sorts the packages in a more efficient order
+# Find a sequence of packages that minimizes the distance traveled
 calculate_shortest_distance(second_delivery, 2, 0)
-# second_truck_total_distance = 0
 
-# this for loop takes the values in the second truck and runs them through the distance functions in the distances.py file
-# Space-time complexity is O(N)
-# second_truck_package_id = 0
-
+# Find the distances between locations, and to add the distances up
 second_truck_total_distance = find_dist(
     second_optimized_truck_index_list,
     second_truck_total_distance,
@@ -193,26 +153,22 @@ second_truck_total_distance = find_dist(
     second_delivery,
     second_truck_package_id,
     second_time_list,
-    # check_time_second_truck,
 )
 
-# =================================================================
-# for loop updates the delivery status of all packages in truck 1 (second delivery) to 'In transit'
-# Space-time complexity is O(N)
+# ------------------------------------------------------------------
+# In a single pass, update departure time for packages in truck 2, and add packages to `second_delivery`
+# Time complexity = O(N)
 for i, pkg in enumerate(third_truck):
     third_truck[i]["delivery_start"] = departure_times["third_time"]
     third_delivery.append(third_truck[i])
 
-# this for loop compares the addresses on truck one (second delivery) to the list of addresses and adds the address index to the list
-# Space-time complexity is O(N^2)
+# Map an address to a location ID, and add the location ID to a location ID list
 find_loc_id(third_delivery, third_truck_distance_list)
 
-# calls to the greedy algorithm that sorts the packages in a more efficient order
+# Find the distances between locations, and to add the distances up
 calculate_shortest_distance(third_delivery, 3, 0)
 
-# this for loop takes the values in the third truck and runs them through the distance functions in the distances.py file
-# Space-time complexity is O(N)
-
+# Find the distances between locations, and to add the distances up
 third_truck_total_distance = find_dist(
     third_optimized_truck_index_list,
     third_truck_total_distance,
@@ -220,21 +176,11 @@ third_truck_total_distance = find_dist(
     third_delivery,
     third_truck_package_id,
     third_time_list,
-    # check_time_third_truck,
 )
 
-
-# =================================================================
-# first_truck_total distance = find_dist
-# first_truck_package_id = 0
-# second_truck_total_distance = 0
-# second_truck_package_id = 0
-# third_truck_total_distance = 0
-# third_truck_package_id = 0
-
-# =================================================================
-# function returns total distance of all 3 trips to calculate the distance of all packages
-# Space-time complexity is O(1)
+# ------------------------------------------------------------------
+# Add up all the distances to get the final total distance
+# Time complexity = O(1)
 def total_distance():
     total_distance = (
         first_truck_total_distance
@@ -270,6 +216,11 @@ and then update them. Currently reassigning values after calling function.
 
 Make a function to calculate third departure time. Calculate the time from the distance of last 
 delivery location to hub, and the time of the last delivery. 
+
+Find out why find_loc_id(delivery, dist_list) returns "Address not found!"
+
+Find out how hash table gets updated without this code: 
+ht_pkgs.update(opt_truck_list[truck_pkg_id]["package_id"], opt_truck_list[truck_pkg_id],)
 
 --------------------------------------------------------------------
 VS Code and python debugger returning error but can run in the terminal
