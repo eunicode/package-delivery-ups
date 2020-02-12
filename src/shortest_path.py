@@ -4,96 +4,73 @@ import datetime
 from helper import print_csv
 from helper import str_to_timedelta
 
-# Read in csv file that is the mapping of distances between locations
+# Copy distances csv data
+# Space complexity = O(N). Time complexity = O(N)
+# Open csv file as a text file and get a file object
 with open("csv/distance_data.csv") as csv_file:
     # Convert to iterable reader object to list
-    # CSV_READER = list(csv.reader(csv_file, delimiter=","))
     csv_reader_dist = csv.reader(csv_file, delimiter=",")
     csv_reader_dist = list(csv_reader_dist)
     # print_csv(csv_reader_dist)
 
-# Read in csv file that is the names of all possible delivery locations
+# Copy location csv data
+# Space complexity = O(N). Time complexity = O(N)
 with open("csv/location_data.csv") as csv_file_location:
     csv_reader_location = csv.reader(csv_file_location, delimiter=",")
-    # print_csv(csv_reader_location)
     csv_reader_location = list(csv_reader_location)
-    # print_csv(csv_reader_location)
 
     # ------------------------------------------------------------------
-    # a list of row/column values are inserted into this function.
-    # This function then calculates the total distance
-    # that distance is then returned, and each iteration represents a distance between two locations
-    # Space-time complexity is O(1)
+    # Calculate current total traveled distance
+    # Add distance to a distance accumulator variable passed in as an argument
+    # Time complexity = O(1)
     def check_distance(row_value, column_value, sum_of_distance):
-        distance = csv_reader_dist[row_value][column_value]  # hub to location
+        # Distance btw loc #1 and loc #2
+        distance = csv_reader_dist[row_value][column_value]
 
-        if distance is "":  # location to hub
+        if distance is "":  # Distance btw location #2 to location #1
             distance = csv_reader_dist[column_value][row_value]
 
+        # Add distance to distance accumulator
         sum_of_distance += float(distance)
         return sum_of_distance
 
-    # this function is very similar to the function above but returns a current distance
-    # Space-time complexity is O(1)
+    # Find the distance between location #1 and location #2
+    # Time complexity = O(1)
     def check_current_distance(row_value, column_value):
-        distance = csv_reader_dist[row_value][column_value]
+        distance = csv_reader_dist[row_value][
+            column_value
+        ]  # Distance btw loc #1 and loc #2
 
         if distance is "":
-            distance = csv_reader_dist[column_value][row_value]
+            distance = csv_reader_dist[column_value][
+                row_value
+            ]  # Distance btw loc #2 and loc #1
 
         return float(distance)
 
     # ------------------------------------------------------------------
-    # this is the time that the first truck leaves the hub
-    # first_time_list = ["8:00:00"]
-    # second_time_list = ["9:10:00"]
-    # third_time_list = ["11:00:00"]
 
-    # this function takes a distance then divides it by 18. It then uses divmod to display a time, and appends 00
-    # this string that is a timestamp is then split, and turned into a datetime timedelta object
-    # that object is then added to sum which represents total distance for a particular truck
-    # runtime of function is O(N)
-
+    # Calculate accumulated time. Also calculate and store time intervals.
+    # Time complexity = O(N)
     def check_time(dist, time):
+        # Calculate the time it took to travel a distance by using the truck's speed.
         new_time = dist / 18  # miles * (1 hour/18 miles) = hours
-        # new_time = distance / 18
+        # Take hours float and format it into a string of hours and minutes
         distance_in_minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(new_time * 60, 60))
-        final_time = distance_in_minutes + ":00"
-        time.append(final_time)
-        # first_time_list.append(final_time)
-        # second_time_list.append(final_time)
-        # third_time_list.append(final_time)
-        sum = datetime.timedelta()
+        final_time = distance_in_minutes + ":00"  # Add seconds to string
 
+        # Add time interval to `time` list
+        time.append(final_time)
+
+        sum = datetime.timedelta()
+        # Add all the time intervals in `time` list
         for t in time:
-            # for i in first_time_list:
-            # for i in third_time_list:
-            # (hour, min, sec) = t.split(":")
-            # d = datetime.timedelta(hours=int(hour), minutes=int(min), seconds=int(sec))
             d = str_to_timedelta(t)
             sum += d
-
         return sum
 
-    # def check_time_first_truck(distance, time_list):
-    #     return check_time(distance, time_list)
-
-    # Repeated function for second truck
-    # def check_time_second_truck(distance, time_list):
-    #     return check_time(distance, time_list)
-
-    # Repeated function for the third truck
-    # def check_time_third_truck(distance, time_list):
-    #     return check_time(distance, time_list)
-
     # ------------------------------------------------------------------
-    # this function returns the time objects to use in the Packages.py file
-    # Space-time complexity is O(1)
-    # def check_address():
-    #     return csv_reader_location
-
-    # ------------------------------------------------------------------
-    # these lists represent the sorted trucks that are put in order of efficiency in the function below
+    # Lists to hold the order of sorted packages
     first_optimized_truck = []
     first_optimized_truck_index_list = []
     second_optimized_truck = []
@@ -101,157 +78,95 @@ with open("csv/location_data.csv") as csv_file_location:
     third_optimized_truck = []
     third_optimized_truck_index_list = []
 
-    # This is my sorting algorithm that uses a greedy approach to automate optimizing the delivery route for each truck.
-    # the function takes 3 parameters (see section 1)
-    # First parameter is the list of packages on a truck that has not been optimized yet
-    # The second parameter represents the truck number
-    # The third parameter represents the current location that is updated each time a truck moves
-
-    # The base case of the algorithm is stated in the initial if statement (see section 2).
-    # This breaks the recursion once the input list has a size of 0.
-    # It starts by setting a "lowest value" of 50.0
-    # and then uses the check current distance function to loop through every possible point that is currently available to see if there is a lower value.
-    # If there is than the lowest value is updated and the search continues (see section 3).
-    # Once it has searched through all possible routes the truck can go given the available packages,
-    # it then adds that package object and associated index to new lists (see section 4).
-    # To ensure that the right truck packages are being associated, the second parameter is checked.
-    # If the truck truck is being sorted than the optimized delivery path will be associated to the lists first_optimized_truck and first_optimized_truck_index.
-    # Each time these lists are updated, the lowest value is removed from the argument list, truck_distance_list.
-    # This will allow us to update current location and recursively call the function.
-    # Once the argument list is empty it will return the empty list and the function call will end.
-
-    # The space-time complexity of this algorithm is O(N^2).
-    # This is due to the two for loops and the repeated lookup functionality required to determine the lowest possible path then move the truck to that position.
+    # Find a sequence of packages to deliver that will minimize the travel distance.
+    # This is a single source shortest path algorithm that uses a greedy approach.
+    # The algorithm uses a list to store the sequence of packages to deliver, and another list to
+    # keep track of delivered packages.
+    # The algorithm works by searching for the closest location to its current location.
+    # Once it finds the closest location, it adds that location to the visited-locations list, and
+    # removes that location from locations-to-visit list.
+    # The time complexity is O(N^2) because it has a while loop with a nested for loop.
+    # The while loop has a for loop that iterates the locations-to-visit list until it finds the
+    # closest location.
+    # Once the for loop finds the closest location, it updates the current location and removes that
+    # location from the locations-to-visit list.
+    # Then we jump back to the while loop and the for loop searches for the closest location to the
+    # new current location.
+    # The while loop keeps running until the locations-to-visit list is empty.
 
     def calculate_shortest_distance(
         truck_distance_list, truck_number, current_location
     ):
 
-        # Sorting algo helper function
+        # Sub-function that adds locations to the visited-locations list, removes locations from
+        # the locations-to-visit list, and updates the current location
         def manage_queue(organized_list, organized_list_index, index):
             organized_list.append(index)
-            # organized_list_index.append(index[1])
             organized_list_index.append(index["location_id"])
             pop_value = truck_distance_list.index(index)
             truck_distance_list.pop(pop_value)
             nonlocal current_location
             current_location = new_location
 
-        # section 1
-        # if len(truck_distance_list) == 0:  # section 2
-        #     return truck_distance_list
-
-        # update variables
-
+        # Iterate the locations-to-visit list
         while len(truck_distance_list) > 0:
-            closest_dist = 14.1  # maximum distance in distances table
+            # Initialize the closest distance to the maximum distance in the distance table
+            closest_dist = 14.1
+            # Initialize the current location to location #0 (hub)
             new_location = 0
 
+            # Iterate the locations-to-visit list
             for index in truck_distance_list:
+                # If the distance between location #1 and location #2 is the less than the current
+                # distance, update it
                 if (
-                    # check_current_distance(current_location, int(index[1]))
                     check_current_distance(current_location, int(index["location_id"]))
                     <= closest_dist
                 ):
                     closest_dist = check_current_distance(
-                        current_location,
-                        int(index["location_id"])
-                        # current_location, int(index[1])
-                    )  # section 3
+                        current_location, int(index["location_id"])
+                    )
                     new_location = int(index["location_id"])
-                    # new_location = int(index[1])
 
-            # Add package to optimized package list
-            # Remove package from packages to check
+            # Iterate the visited-locations list.
+            # The visited-locations list is synonymous to the sequence of packages that a truck needs to deliver.
+            # Update the appropriate trucks:
+            # 1. Add location to visited-locations list.
+            # 2. Remove location from locations-to-visit list
             # Update current_location
-            for index in truck_distance_list:  # section 4
-                # current_location = 0
-
+            for index in truck_distance_list:
                 if (
-                    # check_current_distance(current_location, int(index[1]))
                     check_current_distance(current_location, int(index["location_id"]))
                     == closest_dist
                 ):
                     if truck_number == 1:
-                        # replace
-                        # first_optimized_truck.append(index)
-                        # first_optimized_truck_index_list.append(index[1])
-                        # pop_value = truck_distance_list.index(index)
-                        # truck_distance_list.pop(pop_value)
-                        # current_location = new_location
                         manage_queue(
                             first_optimized_truck,
                             first_optimized_truck_index_list,
                             index,
                         )
-                        # calculate_shortest_distance(
-                        #     truck_distance_list, 1, current_location
-                        # )
 
                     elif truck_number == 2:
-                        # replace
-                        # second_optimized_truck.append(index)
-                        # second_optimized_truck_index_list.append(index[1])
-                        # pop_value = truck_distance_list.index(index)
-                        # truck_distance_list.pop(pop_value)
-                        # current_location = new_location
                         manage_queue(
                             second_optimized_truck,
                             second_optimized_truck_index_list,
                             index,
                         )
-                        # calculate_shortest_distance(
-                        #     truck_distance_list, 2, current_location
-                        # )
+
                     elif truck_number == 3:
-                        # replace
-                        # third_optimized_truck.append(index)
-                        # third_optimized_truck_index_list.append(index[1])
-                        # pop_value = truck_distance_list.index(index)
-                        # truck_distance_list.pop(pop_value)
-                        # current_location = new_location
                         manage_queue(
                             third_optimized_truck,
                             third_optimized_truck_index_list,
                             index,
                         )
-                        # calculate_shortest_distance(
-                        #     truck_distance_list, 3, current_location
-                        # )
 
         return truck_distance_list
 
     # ------------------------------------------------------------------
-
+    # Initialize locations the truck needs to visit with "0", the location ID for the hub
     first_optimized_truck_index_list.insert(0, "0")
-
-    # Space-time complexity is O(1)
-    # def first_optimized_truck_index():
-    #     return first_optimized_truck_index_list
-
-    # Space-time complexity is O(1)
-    # def first_optimized_truck_list():
-    #     return first_optimized_truck
-
     second_optimized_truck_index_list.insert(0, "0")
-
-    # Space-time complexity is O(1)
-    # def second_optimized_truck_index():
-    #     return second_optimized_truck_index_list
-
-    # Space-time complexity is O(1)
-    # def second_optimized_truck_list():
-    #     return second_optimized_truck
-
     third_optimized_truck_index_list.insert(0, "0")
-
-    # Space-time complexity is O(1)
-    # def third_optimized_truck_index():
-    #     return third_optimized_truck_index_list
-
-    # Space-time complexity is O(1)
-    # def third_optimized_truck_list():
-    #     return third_optimized_truck
 
 
 # =================================================================
@@ -340,5 +255,10 @@ divmod(dividend, divisor) = (quotient, remainder)
 --------------------------------------------------------------------
 MY NOTES
 
-variables in open block seem to be global, not local
+variables in open() block seem to be global, not local
+
+visited-locations = sequence of packages to deliver
+locations-to-visit = delivered packages
+This may seem counter intuitive, but it's from the perspective of the algorithm, not from the 
+perspective of the truck. 
 """

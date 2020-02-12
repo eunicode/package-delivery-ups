@@ -4,13 +4,14 @@ from hash_table_instance import ht_pkgs
 from package_delivery import total_distance
 from helper import interface_print, str_to_timedelta, interface_print_single
 
-# Interface welcome
 print("Welcome to the package delivery system!\n")
 
 print(f"All packages were delivered in {total_distance()} miles.")
 
 # -------------------------------------------------------------------
+
 while True:
+    # Store user input in `command` and display interface menu options
     command = input(
         """
     =================================================================
@@ -23,152 +24,100 @@ while True:
     \nEnter a command:
     """
     )
-
-    # Space-time complexity is O(N)
-    # if user types 'timestamp' then they are prompted for a time to display.
-    # Once a time is provided it will display all packages at that timestamp.
-    # Runtime of this process is O(N)
+    # This code block prints data for all packages
+    # This code block has a time complexity of O(N) bc it will iterate all the packages in the hash table.
+    # Inside the for loop we have a get() operation which has a time complexity of O(1).
     if command == "status":
-        # try:
         package_status_time = input("Enter a time in the HH:MM:SS format: ")
         convert_input_time = str_to_timedelta(package_status_time)
-        # (hour, min, sec) = package_status_time.split(":")
-        # convert_user_time = datetime.timedelta(
-        #     hours=int(hour), minutes=int(min), seconds=int(sec)
-        # )
 
-        # Space-time complexity is O(N^2)
-        for count in range(1, 41):
-            try:
-                # first_time = get_hash_map().get(str(count))[9]
-                first_time = ht_pkgs.get(str(count))["delivery_start"]
-                # second_time = get_hash_map().get(str(count))[10]
-                second_time = ht_pkgs.get(str(count))["delivery_status"]
+        for id in range(1, 41):
+            # Get times from the hash table
+            first_time = ht_pkgs.get(str(id))["delivery_start"]
+            second_time = ht_pkgs.get(str(id))["delivery_status"]
 
-                convert_first_time = str_to_timedelta(first_time)
-                # (hour, min, sec) = first_time.split(":")
-                # convert_first_time = datetime.timedelta(
-                #     hours=int(hour), minutes=int(min), seconds=int(sec)
-                # )
-                convert_second_time = str_to_timedelta(second_time)
-                # (hour, min, sec) = second_time.split(":")
-                # convert_second_time = datetime.timedelta(
-                #     hours=int(hour), minutes=int(min), seconds=int(sec)
-                # )
-            except ValueError:
-                pass
+            # Convert strings to timedelta
+            convert_first_time = str_to_timedelta(first_time)
+            convert_second_time = str_to_timedelta(second_time)
 
             # First checks all packages against the given time determine if they have left the hub yet.
-            if convert_first_time >= convert_input_time:
-                # get_hash_map().get(str(count))[9] = "Leaves at " + first_time
-                ht_pkgs.get(str(count))["delivery_start"] = "Leaves at " + first_time
-                # get_hash_map().get(str(count))[10] = "At hub"
-                ht_pkgs.get(str(count))["delivery_status"] = "At hub"
+            # If the user input time is earlier than the departure time, the package is in the hub.
+            # if convert_first_time >= convert_input_time:
+            if convert_input_time <= convert_first_time:
+                ht_pkgs.get(str(id))["delivery_start"] = "Leaves at " + first_time
+                ht_pkgs.get(str(id))["delivery_status"] = "At hub"
 
-                # filler
-                interface_print(count)
-
-            elif convert_first_time <= convert_input_time:
-                # Then checks to see which packages have left the hub but have not been delivered yet
+                # Print package data
+                interface_print(id)
+            # If user input time is later than the departure time, the package is either in transit
+            # or delivered.
+            elif convert_input_time >= convert_first_time:
+                # elif convert_first_time <= convert_input_time:
+                # If user input time is before the delivery time, the package is in transit
                 if convert_input_time < convert_second_time:
-                    # get_hash_map().get(str(count))[9] = "Left at " + first_time
-                    ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
+                    ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
+                    ht_pkgs.get(str(id))["delivery_status"] = "In transit"
 
-                    # get_hash_map().get(str(count))[10] = "In transit"
-                    ht_pkgs.get(str(count))["delivery_status"] = "In transit"
+                    # Print package data
+                    interface_print(id)
 
-                    # filler
-                    interface_print(count)
-
-                # Finally checks all packages that have already been delivered and displays the delivered time
+                # If user input time is after the delivery time, the package is delivered
                 else:
-                    # get_hash_map().get(str(count))[9] = "Left at " + first_time
-                    ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
-
-                    # get_hash_map().get(str(count))[10] = "Delivered at " + second_time
-                    ht_pkgs.get(str(count))["delivery_status"] = (
+                    ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
+                    ht_pkgs.get(str(id))["delivery_status"] = (
                         "Delivered at " + second_time
                     )
 
-                    # filler
-                    interface_print(count)
-
-        # except IndexError:
-        #     print(IndexError)
-        #     exit()
-        # except ValueError:
-        #     print("Invalid entry")
-        #     exit()
+                    # Print package data
+                    interface_print(id)
 
     # -------------------------------------------------------------------
-    # If 'lookup' is selected than the user is prompted for a package ID followed by a timestamp
-    # Once that information is entered then the user will be shown a particular package at a given time
+    # This code block prints data for a user specified package
+    # This code block is O(1) bc the operations in this code block, such as the get() operation, is O(1)
     elif command == "lookup":
-        # try:
-        count = input("Enter a package ID to lookup: ")
-        first_time = ht_pkgs.get(str(count))["delivery_start"]
-        first_time = first_time.replace("Left at ", "")
-        second_time = ht_pkgs.get(str(count))["delivery_status"]
-        second_time = second_time.replace("Delivered at", "")
+        id = input("Enter a package ID to lookup: ")
+        first_time = ht_pkgs.get(str(id))["delivery_start"]
+        second_time = ht_pkgs.get(str(id))["delivery_status"]
         package_status_time = input("Enter a time in the HH:MM:SS format: ")
 
         convert_input_time = str_to_timedelta(package_status_time)
-        # (h, m, s) = package_status_time.split(":")
-        # convert_user_time = datetime.timedelta(
-        #     hours=int(h), minutes=int(m), seconds=int(s)
-        # )
         convert_first_time = str_to_timedelta(first_time)
-        # (hr, min, sec) = first_time.split(":")
-        # print(f"hr: {hr} min: {min} sec: {sec}")
-        # convert_first_time = datetime.timedelta(
-        #     hours=int(hr), minutes=int(min), seconds=int(sec)
-        # )
         convert_second_time = str_to_timedelta(second_time)
-        # (hour, minute, second) = second_time.split(":")
-        # convert_second_time = datetime.timedelta(
-        #     hours=int(hour), minutes=int(minute), seconds=int(second)
-        # )
 
-        # First checks if the package has left the hub yet
-        if convert_first_time >= convert_input_time:
+        # If user input time is earlier than the departure time, the package is at the hub.
+        if convert_input_time <= convert_first_time:
+            ht_pkgs.get(str(id))["delivery_start"] = "Leaves at " + first_time
+            ht_pkgs.get(str(id))["delivery_status"] = "At hub"
 
-            ht_pkgs.get(str(count))["delivery_status"] = "At hub"
-            ht_pkgs.get(str(count))["delivery_start"] = "Leaves at " + first_time
+            # Print package data
+            interface_print(id)
 
-            # filler function
-            interface_print(count)
-
-        elif convert_first_time <= convert_input_time:
-            # Then checks if the package has left the hub but has not been delivered yet
+        # If the user input time is later than the departure time:
+        elif convert_input_time >= convert_first_time:
+            # elif convert_first_time <= convert_input_time:
+            # If the user input time is before the delivery time, the package is in transit
             if convert_input_time < convert_second_time:
-                ht_pkgs.get(str(count))["delivery_status"] = "In transit"
-                ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
+                ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
+                ht_pkgs.get(str(id))["delivery_status"] = "In transit"
 
-                # filler
-                interface_print(count)
+                # Print package data
+                interface_print(id)
 
-            # If the package has already been delivered than it displays the time
+            # If the user input time is after the delivery time, the package is delivered
             else:
-                ht_pkgs.get(str(count))["delivery_status"] = (
-                    "Delivered at " + second_time
-                )
+                ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
+                ht_pkgs.get(str(id))["delivery_status"] = "Delivered at " + second_time
 
-                ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
-
-                # filler
-                interface_print(count)
-        # except ValueError:
-        #     print("Invalid entry")
-        #     exit()
+                # Print package data
+                interface_print(id)
 
     # -------------------------------------------------------------------
     elif command == "exit":
         exit()
     # -------------------------------------------------------------------
     else:
-        print("Invalid entry")
+        print("Invalid command")
         exit()
-
 
 # =================================================================
 #                             NOTES
@@ -190,6 +139,8 @@ TO DO
 
 Create an Interface class or function
 Don't add additional text to delivery_start or delivery_status key values
+Create tests to make sure hash table is being updated correctly, 
+the shortest path algo is working correctly, etc.
 
 --------------------------------------------------------------------
 

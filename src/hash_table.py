@@ -17,8 +17,13 @@ class HashTable:
 
     # ------------------------------------------------------------------
     # Method to add/put packages in the hash table.
-    # Time complexity is O(N) bc we iterate the subcontainer list to check if the package has
-    # already been inserted.
+    # The average time complexity is O(1) bc our hash function evenly distributes packages into buckets.
+    # The worst case time complexity is O(N) bc all the packages could be added to the same bucket.
+    # However, this will not happen bc our package IDs are sequential, not random,
+    # and we can adjust the hash function and number of buckets so that the number of packages
+    # in each bucket remains small.
+    # In this case, we will always have 4 packages per bucket (x % 10, where x is 1-40).
+    # 4 is a constant, so the time complexity is O(1).
     def insert(self, key, value):
         # Determine which bucket the package will go into
         pkg_hash_value = self._hash_fxn(key)
@@ -35,7 +40,10 @@ class HashTable:
 
     # ------------------------------------------------------------------
     # Method to get package data from hash table
-    # Time complexity is O(N) bc we iterate the subcontainer list to find the package
+    # Average time complexity is O(1) bc our hash function evenly distributes packages into buckets.
+    # The worst case time complexity is O(N), but this will not happen bc our hash function
+    # effectively divides packages into buckets, and we can adjust the hash function and hash table
+    # size so that our buckets will always have a small number of packages.
     def get(self, key):
         hash_value = self._hash_fxn(key)
 
@@ -46,7 +54,7 @@ class HashTable:
 
     # ------------------------------------------------------------------
     # Method to update packages
-    # Time complexity is O(N)
+    # Average time complexity is O(1) bc our hash function evenly distributes packages into buckets.
     def update(self, key, value):
         hash_value = self._hash_fxn(key)
 
@@ -61,7 +69,7 @@ class HashTable:
 
     # ------------------------------------------------------------------
     # Method to remove a package from the hash table
-    # Time complexity is O(N)
+    # Average time complexity is O(1) bc our hash function evenly distributes packages into buckets.
     def delete(self, key):
         key_hash = self._hash_fxn(key)
 
@@ -72,7 +80,9 @@ class HashTable:
 
     # ------------------------------------------------------------------
     # Print all packages
-    # Time complexity = O(N^2)
+    # Time complexity is O(N * 1)
+    # The outer for loop is O(N) bc we will iterate through all the packages in the hash table.
+    # The inner for loop is O(1) bc the bucket subcontainer will always carry a small number of packages.
     def print_values(self):
         my_str = f""
         for i in range(len(self.bucket_list)):
@@ -82,7 +92,9 @@ class HashTable:
 
     # ------------------------------------------------------------------
     # Print packages in specified bucket
-    # Time complexity = O(N)
+    # Average time complexity is O(1) bc our hash function evenly distributes packages into buckets.
+    # Therefore, our bucket will always have a small number of packages, a constant which is not
+    # proportional to the size of the input (number of packages).
     def print_bucket(self, bucket):
         my_str = f""
         for i in range(len(self.bucket_list[bucket])):
