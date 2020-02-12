@@ -1,18 +1,18 @@
 import re  # Regex
 import datetime
 
-from hash_table_instance import insert_into_hash_table
+from hash_table_instance import ht_pkgs
 
 # -------------------------------------------------------------------
 # Print package data - multiple line
 def interface_print(count):
     my_str = f"""
-    Package ID: {insert_into_hash_table.get(str(count))["package_id"]}
-    Address: {insert_into_hash_table.get(str(count))["address"]} {insert_into_hash_table.get(str(count))["city"]} UT {insert_into_hash_table.get(str(count))["zip"]}
-    Deadline: {insert_into_hash_table.get(str(count))["deadline"]}
-    Package weight: {insert_into_hash_table.get(str(count))["weight"]}
-    Truck status: {insert_into_hash_table.get(str(count))["delivery_start"]}
-    Delivery status: {insert_into_hash_table.get(str(count))["delivery_status"]}"""
+    Package ID: {ht_pkgs.get(str(count))["package_id"]}
+    Address: {ht_pkgs.get(str(count))["address"]} {ht_pkgs.get(str(count))["city"]} UT {ht_pkgs.get(str(count))["zip"]}
+    Deadline: {ht_pkgs.get(str(count))["deadline"]}
+    Package weight: {ht_pkgs.get(str(count))["weight"]}
+    Truck status: {ht_pkgs.get(str(count))["delivery_start"]}
+    Delivery status: {ht_pkgs.get(str(count))["delivery_status"]}"""
     print(my_str)
 
 
@@ -20,7 +20,7 @@ def interface_print(count):
 # Print package data - single line
 def interface_print_single(count):
     my_str = f"""
-    Package ID: {insert_into_hash_table.get(str(count))["package_id"]} | Address: {insert_into_hash_table.get(str(count))["address"]} {insert_into_hash_table.get(str(count))["city"]} UT {insert_into_hash_table.get(str(count))["zip"]} | Deadline: {insert_into_hash_table.get(str(count))["deadline"]} | Package weight: {insert_into_hash_table.get(str(count))["weight"]} | Truck status: {insert_into_hash_table.get(str(count))["delivery_start"]} | Delivery status: {insert_into_hash_table.get(str(count))["delivery_status"]}"""
+    Package ID: {ht_pkgs.get(str(count))["package_id"]} | Address: {ht_pkgs.get(str(count))["address"]} {ht_pkgs.get(str(count))["city"]} UT {ht_pkgs.get(str(count))["zip"]} | Deadline: {ht_pkgs.get(str(count))["deadline"]} | Package weight: {ht_pkgs.get(str(count))["weight"]} | Truck status: {ht_pkgs.get(str(count))["delivery_start"]} | Delivery status: {ht_pkgs.get(str(count))["delivery_status"]}"""
     print(my_str)
 
 

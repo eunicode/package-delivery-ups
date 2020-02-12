@@ -172,3 +172,4 @@ first_optimized_truck_list = [
         "delivery_status": "9:36:00",
     },
 ]
+

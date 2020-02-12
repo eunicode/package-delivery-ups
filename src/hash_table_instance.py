@@ -1,8 +1,8 @@
 import csv
 from hash_table import HashTable
 
-# Create hash table to hold all the package data
-insert_into_hash_table = HashTable()
+# Create hash table to hold all the packages and data
+ht_pkgs = HashTable()
 # Packages that must be delivered together
 conjoined_pkgs = ["13", "14", "15", "16", "19", "20"]
 first_truck = []
@@ -16,11 +16,11 @@ with open("csv/package_data.csv") as csv_file:
     csv_reader_pkg = csv.reader(csv_file, delimiter=",")
     # print_csv()
 
-    # In a single pass, we add csv package data to our hash table, and load packages into trucks.
-    # Time complexity is O(N^2) because of the for loop, and an implicit inner for loop
-    # inside the outer for loop.
-    # This for loop causes our hash table variable to take O(N) space because the data we add to the
-    # hash table is proportional to the input, the csv package data.
+    # In a single pass, we add load packages into trucks and add csv package data to our hash table.
+    # Time complexity is O(N^2) because of the for loop, and an implicit inner for loop inside the
+    # outer for loop.
+    # This for loop causes our hash table variable `ht_pkgs` to take O(N) space because the data we
+    # add to the hash table is proportional to the input, the csv package data.
     for row in csv_reader_pkg:
         # Copy csv package data into a dictionary.
         pkg_data = {
@@ -74,22 +74,22 @@ with open("csv/package_data.csv") as csv_file:
         value = pkg_data
 
         # Add values to hash table
-        insert_into_hash_table.insert(key, value)
+        ht_pkgs.insert(key, value)
 
 # =================================================================
 # TEST
 
 # Print package #1 details
-# test_value = insert_into_hash_table.get("1")
+# test_value = ht_pkgs.get("1")
 # print(test_value)
 
 # Print all packages
-# insert_into_hash_table.print_values()
+# ht_pkgs.print_values()
 
 # Print packages in bucket 1
-# insert_into_hash_table.print_bucket(1)
+# ht_pkgs.print_bucket(1)
 
-# print(f"map: {insert_into_hash_table.map}")
+# print(f"bucket_list: {ht_pkgs.bucket_list}")
 
 # -------------------------------------------------------------------
 # See how packages are divided into trucks

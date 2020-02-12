@@ -5,7 +5,7 @@ from hash_table_instance import (
     first_truck,
     second_truck,
     third_truck,
-    insert_into_hash_table,
+    ht_pkgs,
 )
 
 # from hash_table_instance import check_first_truck_first_trip
@@ -104,6 +104,7 @@ def find_dist(
     # check_time,
 ):
     for index in range(len(opt_truck_idx)):
+        # If we are at the last location, exit for loop
         if index == len(opt_truck_idx) - 1:
             break
         # try:
@@ -122,9 +123,12 @@ def find_dist(
 
         opt_truck_list[truck_pkg_id]["delivery_status"] = str(deliver_package)
 
-        insert_into_hash_table.update(
-            int(opt_truck_list[truck_pkg_id]["package_id"]), delivery,
-        )
+        # ht_pkgs.update(
+        #     opt_truck_list[truck_pkg_id]["package_id"], opt_truck_list[truck_pkg_id],
+        # )
+        # ht_pkgs.update(
+        #     int(opt_truck_list[truck_pkg_id]["package_id"]), delivery,
+        # )
 
         truck_pkg_id += 1
         # except IndexError:
@@ -348,7 +352,8 @@ def total_distance():
 # print(f"first delivery: {first_delivery}")
 # print(f"first truck: {first_truck}")
 
-print(first_truck_package_id)
+# print(first_truck_package_id)
+
 # =================================================================
 #                             NOTES
 # =================================================================
@@ -358,6 +363,9 @@ TO DO
 Get rid of globals. Or package them in an array. 
 Find a better way to initialize global primitive variables, pass them as arguments to functions,
 and then update them. Currently reassigning values after calling function.
+
+Make a function to calculate third departure time. Calculate the time from the distance of last 
+delivery location to hub, and the time of the last delivery. 
 
 --------------------------------------------------------------------
 VS Code and python debugger returning error but can run in the terminal

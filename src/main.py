@@ -1,6 +1,6 @@
 # Eunice Park ID: #001128345
 
-from hash_table_instance import insert_into_hash_table
+from hash_table_instance import ht_pkgs
 from package_delivery import total_distance
 from helper import interface_print, str_to_timedelta, interface_print_single
 
@@ -10,7 +10,7 @@ print("Welcome to the package delivery system!\n")
 print(f"All packages were delivered in {total_distance()} miles.")
 
 # TEST
-# test = insert_into_hash_table.get("1")  # ["delivery_start"]
+# test = ht_pkgs.get("1")  # ["delivery_start"]
 # print(test)
 
 # -------------------------------------------------------------------
@@ -45,9 +45,9 @@ while True:
         for count in range(1, 41):
             try:
                 # first_time = get_hash_map().get(str(count))[9]
-                first_time = insert_into_hash_table.get(str(count))["delivery_start"]
+                first_time = ht_pkgs.get(str(count))["delivery_start"]
                 # second_time = get_hash_map().get(str(count))[10]
-                second_time = insert_into_hash_table.get(str(count))["delivery_status"]
+                second_time = ht_pkgs.get(str(count))["delivery_status"]
 
                 convert_first_time = str_to_timedelta(first_time)
                 # (hour, min, sec) = first_time.split(":")
@@ -65,11 +65,9 @@ while True:
             # First checks all packages against the given time determine if they have left the hub yet.
             if convert_first_time >= convert_input_time:
                 # get_hash_map().get(str(count))[9] = "Leaves at " + first_time
-                insert_into_hash_table.get(str(count))["delivery_start"] = (
-                    "Leaves at " + first_time
-                )
+                ht_pkgs.get(str(count))["delivery_start"] = "Leaves at " + first_time
                 # get_hash_map().get(str(count))[10] = "At hub"
-                insert_into_hash_table.get(str(count))["delivery_status"] = "At hub"
+                ht_pkgs.get(str(count))["delivery_status"] = "At hub"
 
                 # filler
                 interface_print(count)
@@ -78,14 +76,10 @@ while True:
                 # Then checks to see which packages have left the hub but have not been delivered yet
                 if convert_input_time < convert_second_time:
                     # get_hash_map().get(str(count))[9] = "Left at " + first_time
-                    insert_into_hash_table.get(str(count))["delivery_start"] = (
-                        "Left at " + first_time
-                    )
+                    ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
 
                     # get_hash_map().get(str(count))[10] = "In transit"
-                    insert_into_hash_table.get(str(count))[
-                        "delivery_status"
-                    ] = "In transit"
+                    ht_pkgs.get(str(count))["delivery_status"] = "In transit"
 
                     # filler
                     interface_print(count)
@@ -93,12 +87,10 @@ while True:
                 # Finally checks all packages that have already been delivered and displays the delivered time
                 else:
                     # get_hash_map().get(str(count))[9] = "Left at " + first_time
-                    insert_into_hash_table.get(str(count))["delivery_start"] = (
-                        "Left at " + first_time
-                    )
+                    ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
 
                     # get_hash_map().get(str(count))[10] = "Delivered at " + second_time
-                    insert_into_hash_table.get(str(count))["delivery_status"] = (
+                    ht_pkgs.get(str(count))["delivery_status"] = (
                         "Delivered at " + second_time
                     )
 
@@ -118,9 +110,9 @@ while True:
     elif command == "lookup":
         # try:
         count = input("Enter a package ID to lookup: ")
-        first_time = insert_into_hash_table.get(str(count))["delivery_start"]
+        first_time = ht_pkgs.get(str(count))["delivery_start"]
         first_time = first_time.replace("Left at ", "")
-        second_time = insert_into_hash_table.get(str(count))["delivery_status"]
+        second_time = ht_pkgs.get(str(count))["delivery_status"]
         second_time = second_time.replace("Delivered at", "")
         package_status_time = input("Enter a time in the HH:MM:SS format: ")
 
@@ -144,10 +136,8 @@ while True:
         # First checks if the package has left the hub yet
         if convert_first_time >= convert_input_time:
 
-            insert_into_hash_table.get(str(count))["delivery_status"] = "At hub"
-            insert_into_hash_table.get(str(count))["delivery_start"] = (
-                "Leaves at " + first_time
-            )
+            ht_pkgs.get(str(count))["delivery_status"] = "At hub"
+            ht_pkgs.get(str(count))["delivery_start"] = "Leaves at " + first_time
 
             # filler function
             interface_print(count)
@@ -155,23 +145,19 @@ while True:
         elif convert_first_time <= convert_input_time:
             # Then checks if the package has left the hub but has not been delivered yet
             if convert_input_time < convert_second_time:
-                insert_into_hash_table.get(str(count))["delivery_status"] = "In transit"
-                insert_into_hash_table.get(str(count))["delivery_start"] = (
-                    "Left at " + first_time
-                )
+                ht_pkgs.get(str(count))["delivery_status"] = "In transit"
+                ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
 
                 # filler
                 interface_print(count)
 
             # If the package has already been delivered than it displays the time
             else:
-                insert_into_hash_table.get(str(count))["delivery_status"] = (
+                ht_pkgs.get(str(count))["delivery_status"] = (
                     "Delivered at " + second_time
                 )
 
-                insert_into_hash_table.get(str(count))["delivery_start"] = (
-                    "Left at " + first_time
-                )
+                ht_pkgs.get(str(count))["delivery_start"] = "Left at " + first_time
 
                 # filler
                 interface_print(count)
@@ -207,7 +193,8 @@ ValueError: invalid literal for int() with base 10: 'Left at 9'
 TO DO
 
 Create an Interface class or function
-Prevent "Left at" from printing twice
+Don't add additional text to delivery_start or delivery_status key values
+
 --------------------------------------------------------------------
 
 """

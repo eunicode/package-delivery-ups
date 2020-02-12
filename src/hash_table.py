@@ -1,92 +1,92 @@
 class HashTable:
-    """
-    Hash table
-    put()
-    get()
-    remove()
-    update()
-    """
-
-    # Constructor
-    # Time complexity is O(N)
-    def __init__(self, initial_capacity=10):
-        self.map = []
-        # Chaining: initialize buckets with empty lists
-        for elm in range(initial_capacity):
-            self.map.append([])
+    # Constructor. The default number of buckets is 10 (size).
+    def __init__(self, size=10):
+        self.size = size
+        self.bucket_list = []
+        # Chaining: Add an empty list (subcontainer) to every bucket.
+        # Chaining means a bucket/index holds a list instead of a single value
+        for bucket in range(size):
+            self.bucket_list.append([])
 
     # ------------------------------------------------------------------
-    # Hash function that is used internally by the class
+    # Hash function that is used internally by the class.
+    # Returns the bucket/slot the package is in.
     # Time complexity = O(1)
-    def _get_hash(self, key):
-        return int(key) % len(self.map)
-        # return bucket
+    def _hash_fxn(self, key):
+        return int(key) % self.size
 
     # ------------------------------------------------------------------
-    # Insert a new package value into the hash table
-    # Space complexity is O(N)
+    # Method to add/put packages in the hash table.
+    # Time complexity is O(N) bc we iterate the subcontainer list to check if the package has
+    # already been inserted.
     def insert(self, key, value):
-        key_hash = self._get_hash(key)
-        key_value = [key, value]
+        # Determine which bucket the package will go into
+        pkg_hash_value = self._hash_fxn(key)
+        pkg_pair = [key, value]  # package ID and data
 
-        if self.map[key_hash] is None:
-            self.map[key_hash] = list([key_value])
-            return True
-        else:
-            for pair in self.map[key_hash]:
-                if pair[0] == key:
-                    pair[1] = key_value
-                    return True
-            self.map[key_hash].append(key_value)
-            return True
+        # Check if package has already been inserted
+        for package_pair in self.bucket_list[pkg_hash_value]:
+            if package_pair[0] == key:
+                assert False, "This package has already been inserted!"
+                return
 
-    # ------------------------------------------------------------------
-    # Space-time complexity is O(N)
-    def update(self, key, value):
-        key_hash = self._get_hash(key)
-        if self.map[key_hash] is not None:
-            for pair in self.map[key_hash]:
-                if pair[0] == key:
-                    pair[1] = value
-                    print(pair[1])
-                    return True
-        else:
-            print("There was an error with updating on key: " + key)
+        # Insert package
+        self.bucket_list[pkg_hash_value].append(pkg_pair)
 
     # ------------------------------------------------------------------
-    # Grab a value from the hash table
-    # Space-time complexity is O(N)
+    # Method to get package data from hash table
+    # Time complexity is O(N) bc we iterate the subcontainer list to find the package
     def get(self, key):
-        key_hash = self._get_hash(key)
-        if self.map[key_hash] is not None:
-            for pair in self.map[key_hash]:
-                if pair[0] == key:
-                    return pair[1]
-        return None
+        hash_value = self._hash_fxn(key)
+
+        # Search bucket's subcontainer to find package matching the given ID
+        for pkg_pair in self.bucket_list[hash_value]:
+            if pkg_pair[0] == key:
+                return pkg_pair[1]
 
     # ------------------------------------------------------------------
-    # Remove a value from the hash table
-    # runtime is O(N)
+    # Method to update packages
+    # Time complexity is O(N)
+    def update(self, key, value):
+        hash_value = self._hash_fxn(key)
 
+        for pkg_pair in self.bucket_list[hash_value]:
+            if pkg_pair[0] == key:
+                pkg_pair[1] = value
+                # print("hi")
+                # print(pkg_pair[1])
+        # print("update was run")
+        # if self.bucket_list[key_hash] is not None:
+        #     for pair in self.bucket_list[key_hash]:
+        #         if pair[0] == key:
+        #             pair[1] = value
+        #             print(pair[1])
+        #             # return True
+        # else:
+        #     print("There was an error with updating on key: " + key)
+
+    # ------------------------------------------------------------------
+    # Method to remove a package from the hash table
+    # Time complexity is O(N)
     def delete(self, key):
-        key_hash = self._get_hash(key)
+        key_hash = self._hash_fxn(key)
 
-        if self.map[key_hash] is None:
-            return False
-        for i in range(0, len(self.map[key_hash])):
-            if self.map[key_hash][i][0] == key:
-                self.map[key_hash].pop(i)
-                return True
-        return False
+        # if self.bucket_list[key_hash] is None:
+        #     return False
+        for i in range(0, len(self.bucket_list[key_hash])):
+            if self.bucket_list[key_hash][i][0] == key:
+                self.bucket_list[key_hash].pop(i)
+                # return True
+        # return False
 
     # ------------------------------------------------------------------
     # Print all packages
     # Time complexity = O(N^2)
     def print_values(self):
         my_str = f""
-        for i in range(len(self.map)):
-            for j in range(len(self.map[i])):
-                my_str += f"\n{self.map[i][j]}"
+        for i in range(len(self.bucket_list)):
+            for j in range(len(self.bucket_list[i])):
+                my_str += f"\n{self.bucket_list[i][j]}"
         print(my_str)
 
     # ------------------------------------------------------------------
@@ -94,8 +94,8 @@ class HashTable:
     # Time complexity = O(N)
     def print_bucket(self, bucket):
         my_str = f""
-        for i in range(len(self.map[bucket])):
-            my_str += f"\n{self.map[bucket][i]}"
+        for i in range(len(self.bucket_list[bucket])):
+            my_str += f"\n{self.bucket_list[bucket][i]}"
         print(my_str)
 
 
@@ -122,7 +122,7 @@ class HashTable:
 #     "2", ["2", "2530 S 500 E", "Salt Lake City", "UT", "84106", "EOD", "44", "None"]
 # )
 
-# print(f"map: {ht.map}")
+# print(f"bucket_list: {ht.bucket_list}")
 
 # for key in ("1", "2"):
 #     value = ht.get(key)
@@ -154,12 +154,22 @@ Alternative: self-balancing BSTs instead of lists.
 Alternative: open addressing e.g. linear probing aka open-addressing hashing
 
 --------------------------------------------------------------------
+ASSERT
+https://stackoverflow.com/questions/5142418/what-is-the-use-of-assert-in-python
+
+--------------------------------------------------------------------
 RANDOM
 
 Looking up a key that does not exist returns `None`.
 
-bucket array
+bucket_list = bucket array = table
+a bucket/slot/index holds a subcontainer, a list
+Possible semantics confusion: bucket can refer to the index, or to the value of the index, 
+the subcontainer list
+Correct term is hash value
 
+[ 0, 1, 2 ]
+[ [], [], [] ]
 put() / get() / remove()
 --------------------------------------------------------------------
 """
