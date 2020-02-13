@@ -48,7 +48,7 @@ while True:
                 ht_pkgs.get(str(id))["delivery_status"] = "At hub"
 
                 # Print package data
-                interface_print(id)
+                interface_print_single(id)
             # If user input time is later than the departure time, the package is either in transit
             # or delivered.
             elif convert_input_time >= convert_first_time:
@@ -59,7 +59,7 @@ while True:
                     ht_pkgs.get(str(id))["delivery_status"] = "In transit"
 
                     # Print package data
-                    interface_print(id)
+                    interface_print_single(id)
 
                 # If user input time is after the delivery time, the package is delivered
                 else:
@@ -69,7 +69,7 @@ while True:
                     )
 
                     # Print package data
-                    interface_print(id)
+                    interface_print_single(id)
 
     # -------------------------------------------------------------------
     # This code block prints data for a user specified package
@@ -90,7 +90,7 @@ while True:
             ht_pkgs.get(str(id))["delivery_status"] = "At hub"
 
             # Print package data
-            interface_print(id)
+            interface_print_single(id)
 
         # If the user input time is later than the departure time:
         elif convert_input_time >= convert_first_time:
@@ -101,7 +101,7 @@ while True:
                 ht_pkgs.get(str(id))["delivery_status"] = "In transit"
 
                 # Print package data
-                interface_print(id)
+                interface_print_single(id)
 
             # If the user input time is after the delivery time, the package is delivered
             else:
@@ -109,7 +109,7 @@ while True:
                 ht_pkgs.get(str(id))["delivery_status"] = "Delivered at " + second_time
 
                 # Print package data
-                interface_print(id)
+                interface_print_single(id)
 
     # -------------------------------------------------------------------
     elif command == "exit":

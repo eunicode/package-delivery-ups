@@ -1,5 +1,6 @@
 import csv
 import datetime
+import math
 
 from helper import print_csv
 from helper import str_to_timedelta
@@ -110,8 +111,8 @@ with open("csv/location_data.csv") as csv_file_location:
 
         # Iterate the locations-to-visit list
         while len(truck_distance_list) > 0:
-            # Initialize the closest distance to the maximum distance in the distance table
-            closest_dist = 14.1
+            # Initialize the closest distance to be infinity
+            closest_dist = math.inf
             # Initialize the current location to location #0 (hub)
             new_location = 0
 

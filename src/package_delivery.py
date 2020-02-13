@@ -32,8 +32,8 @@ third_truck_distance_list = []
 
 departure_times = {
     "first_time": "8:00:00",
-    "second_time": "9:10:00",
-    "third_time": "11:00:00",
+    "second_time": "9:05:00",
+    "third_time": "10:30:00",
 }
 
 first_time_list = [departure_times["first_time"]]
