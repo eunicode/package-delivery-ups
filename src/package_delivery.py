@@ -1,9 +1,9 @@
 from helper import str_to_timedelta
 
 from hash_table_instance import (
-    first_truck,
-    second_truck,
-    third_truck,
+    truck1,
+    truck2,
+    truck3,
     ht_pkgs,
 )
 
@@ -28,14 +28,14 @@ truck2_undelivered = []
 truck3_undelivered = []
 
 # Variables to hold copies of unoptimized trucks' packages' location IDs
-first_truck_distance_list = []
-second_truck_distance_list = []
-third_truck_distance_list = []
+truck1_undelivered_loc = []
+truck2_undelivered_loc = []
+truck3_undelivered_loc = []
 
 departure_times = {
     "first_time": "8:00:00",
-    "second_time": "9:05:00",
-    "third_time": "10:30:00",
+    "second_time": "9:05:00",  # Time late packages arrive at hub
+    "third_time": "10:30:00",  # Time first truck returns
 }
 
 # Variables to hold the times it takes to get from
@@ -110,12 +110,12 @@ def find_dist(
 # ------------------------------------------------------------------
 # In a single pass, update departure time for packages in truck 1, and add packages to `truck1_undelivered`
 # Time complexity = O(N)
-for i, package in enumerate(first_truck):
-    first_truck[i]["delivery_start"] = departure_times["first_time"]
-    truck1_undelivered.append(first_truck[i])
+for i, package in enumerate(truck1):
+    truck1[i]["delivery_start"] = departure_times["first_time"]
+    truck1_undelivered.append(truck1[i])
 
 # Map an address to a location ID, and add the location ID to a location ID list
-find_loc_id(truck1_undelivered, first_truck_distance_list)
+find_loc_id(truck1_undelivered, truck1_undelivered_loc)
 
 # Find a sequence of packages that minimizes the distance traveled
 shortest_path_finder(truck1_undelivered, 1, 0)
@@ -136,12 +136,12 @@ truck1_tot_dist = find_dist(
 # ------------------------------------------------------------------
 # In a single pass, update departure time for packages in truck 2, and add packages to `truck2_undelivered`
 # Time complexity = O(N)
-for i, pkg in enumerate(second_truck):
-    second_truck[i]["delivery_start"] = departure_times["second_time"]
-    truck2_undelivered.append(second_truck[i])
+for i, pkg in enumerate(truck2):
+    truck2[i]["delivery_start"] = departure_times["second_time"]
+    truck2_undelivered.append(truck2[i])
 
 # Map an address to a location ID, and add the location ID to a location ID list
-find_loc_id(truck2_undelivered, second_truck_distance_list)
+find_loc_id(truck2_undelivered, truck2_undelivered_loc)
 
 # Find a sequence of packages that minimizes the distance traveled
 shortest_path_finder(truck2_undelivered, 2, 0)
@@ -159,12 +159,12 @@ truck2_tot_dist = find_dist(
 # ------------------------------------------------------------------
 # In a single pass, update departure time for packages in truck 2, and add packages to `truck2_undelivered`
 # Time complexity = O(N)
-for i, pkg in enumerate(third_truck):
-    third_truck[i]["delivery_start"] = departure_times["third_time"]
-    truck3_undelivered.append(third_truck[i])
+for i, pkg in enumerate(truck3):
+    truck3[i]["delivery_start"] = departure_times["third_time"]
+    truck3_undelivered.append(truck3[i])
 
 # Map an address to a location ID, and add the location ID to a location ID list
-find_loc_id(truck3_undelivered, third_truck_distance_list)
+find_loc_id(truck3_undelivered, truck3_undelivered_loc)
 
 # Find the distances between locations, and to add the distances up
 shortest_path_finder(truck3_undelivered, 3, 0)

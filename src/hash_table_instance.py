@@ -5,9 +5,10 @@ from hash_table import HashTable
 ht_pkgs = HashTable()
 # Packages that must be delivered together
 conjoined_pkgs = ["13", "14", "15", "16", "19", "20"]
-first_truck = []
-second_truck = []
-third_truck = []
+# Variables to hold packages loaded into trucks
+truck1 = []
+truck2 = []
+truck3 = []
 
 # Open csv file as a text file and get a file object
 with open("csv/package_data.csv") as csv_file:
@@ -39,36 +40,32 @@ with open("csv/package_data.csv") as csv_file:
 
         # Divide packages into trucks according to the restrictions.
         if pkg_data["note"] == "Can only be on truck 2":
-            second_truck.append(pkg_data)
+            truck2.append(pkg_data)
         if pkg_data["package_id"] in conjoined_pkgs:
-            if pkg_data not in first_truck:
-                first_truck.append(pkg_data)
+            if pkg_data not in truck1:
+                truck1.append(pkg_data)
         if "9:00" in pkg_data["deadline"]:
-            if pkg_data not in first_truck:
-                first_truck.append(pkg_data)
+            if pkg_data not in truck1:
+                truck1.append(pkg_data)
         if "10:30" in pkg_data["deadline"]:  # Todo: make more intelligent
-            if pkg_data not in first_truck:
-                first_truck.append(pkg_data)
+            if pkg_data not in truck1:
+                truck1.append(pkg_data)
         if "9:05" in pkg_data["note"]:
-            second_truck.append(pkg_data)
+            truck2.append(pkg_data)
         if "84104" in pkg_data["zip"]:
             if "10:30" not in pkg_data["deadline"]:
-                third_truck.append(pkg_data)
+                truck3.append(pkg_data)
         if "Wrong address" in pkg_data["note"]:
             pkg_data["address"] = "410 S State St"
             pkg_data["zip"] = "84111"
-            third_truck.append(pkg_data)
+            truck3.append(pkg_data)
 
         # Add remaining packages into trucks with the least number of packages
-        if (
-            pkg_data not in first_truck
-            and pkg_data not in second_truck
-            and pkg_data not in third_truck
-        ):
-            if len(second_truck) > len(third_truck):
-                third_truck.append(pkg_data)
+        if pkg_data not in truck1 and pkg_data not in truck2 and pkg_data not in truck3:
+            if len(truck2) > len(truck3):
+                truck3.append(pkg_data)
             else:
-                second_truck.append(pkg_data)
+                truck2.append(pkg_data)
 
         key = row[0]  # package ID
         value = pkg_data
@@ -93,9 +90,9 @@ with open("csv/package_data.csv") as csv_file:
 
 # -------------------------------------------------------------------
 # See how packages are divided into trucks
-# print(f"First truck = {first_truck}")
-# print(f"Second truck = {second_truck}")
-# print(f"First truck second trip = {third_truck}")
+# print(f"First truck = {truck1}")
+# print(f"Second truck = {truck2}")
+# print(f"First truck second trip = {truck3}")
 
 # def print_truck(truck):
 #     my_str = f""
@@ -103,9 +100,9 @@ with open("csv/package_data.csv") as csv_file:
 #         my_str += f"{package['package_id']} ,"
 #     print(my_str)
 
-# print_truck(first_truck)
-# print_truck(second_truck)
-# print_truck(third_truck)
+# print_truck(truck1)
+# print_truck(truck2)
+# print_truck(truck3)
 
 
 # =================================================================
