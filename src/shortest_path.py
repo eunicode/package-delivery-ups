@@ -92,27 +92,28 @@ with open("csv/location_data.csv") as csv_file_location:
     # Then we jump back to the while loop and the for loop searches for the closest location to the
     # new current location.
     # The while loop ends when we have visited all the locations.
-    def shortest_path_finder(truck_distance_list, truck_num, current_location):
+    def shortest_path_finder(truck_unvisited, truck_num):
+        current_location = 0  # Hub
 
         # Sub-function that adds locations to the visited-locations list, removes locations from
         # the locations-to-visit list, and updates the current location
         def manage_queue(truck_pkg_opt, truck_loc_opt, idx):
             truck_pkg_opt.append(idx)  # Add package to truck
             truck_loc_opt.append(idx["location_id"])  # Add location to visited list
-            pop_idx = truck_distance_list.index(idx)  # Find index of visited location
-            truck_distance_list.pop(pop_idx)  # Remove from unvisited list
+            pop_idx = truck_unvisited.index(idx)  # Find index of visited location
+            truck_unvisited.pop(pop_idx)  # Remove from unvisited list
             nonlocal current_location
             current_location = temp_location
 
         # Iterate the locations-to-visit list
-        while len(truck_distance_list) > 0:
+        while len(truck_unvisited) > 0:
             # Initialize the closest distance to be infinity
             closest_dist = math.inf
             # Initialize the current location to location #0 (hub)
             temp_location = 0
 
             # Iterate the locations-to-visit list
-            for index in truck_distance_list:
+            for index in truck_unvisited:
                 # If the distance between location #1 and location #2 is the less than the current
                 # distance, update it
                 if (
@@ -130,7 +131,7 @@ with open("csv/location_data.csv") as csv_file_location:
             # 1. Add location to visited-locations list.
             # 2. Remove location from locations-to-visit list
             # Update current_location
-            for index in truck_distance_list:
+            for index in truck_unvisited:
                 if (
                     distance_get(current_location, int(index["location_id"]))
                     == closest_dist
@@ -150,7 +151,7 @@ with open("csv/location_data.csv") as csv_file_location:
                             truck3_pkg_seq, truck3_loc_seq, index,
                         )
 
-        return truck_distance_list
+        # return truck_unvisited
 
     # ------------------------------------------------------------------
     # Initialize locations the truck needs to visit with "0", the location ID for the hub

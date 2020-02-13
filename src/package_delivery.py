@@ -38,22 +38,18 @@ departure_times = {
     "third_time": "10:30:00",  # Time first truck returns
 }
 
-# Variables to hold the times it takes to get from
+# Variables to hold the times to travel edges
 truck1_times = [departure_times["first_time"]]
 truck2_times = [departure_times["second_time"]]
 truck3_times = [departure_times["third_time"]]
 
+# Variables to hold total distances
 truck1_tot_dist = 0
-first_truck_package_id = 0
 truck2_tot_dist = 0
-second_truck_package_id = 0
 truck3_tot_dist = 0
-third_truck_package_id = 0
 
 convert_first_time = str_to_timedelta(departure_times["first_time"])
-
 convert_second_time = str_to_timedelta(departure_times["second_time"])
-
 convert_third_time = str_to_timedelta(departure_times["third_time"])
 
 # ------------------------------------------------------------------
@@ -75,7 +71,7 @@ def find_loc_id(delivery, dist_list):
 # Function to find the distances between locations, add the distances up
 # Time complexity = O(N^2)
 def find_dist(
-    opt_truck_idx, truck_tot_dist, opt_truck_list, delivery, truck_pkg_id, time_list,
+    opt_truck_idx, truck_tot_dist, opt_truck_list, delivery, time_list,
 ):
     for index in range(len(opt_truck_idx)):
         # If we are at the last location, exit for loop
@@ -96,13 +92,13 @@ def find_dist(
         )
 
         # Update the delivery time
-        opt_truck_list[truck_pkg_id]["delivery_status"] = str(deliver_package)
+        opt_truck_list[index]["delivery_status"] = str(deliver_package)
 
         ht_pkgs.update(
-            opt_truck_list[truck_pkg_id]["package_id"], opt_truck_list[truck_pkg_id],
+            opt_truck_list[index]["package_id"], opt_truck_list[index],
         )
 
-        truck_pkg_id += 1
+        # truck_pkg_id += 1
 
     return truck_tot_dist
 
@@ -118,7 +114,7 @@ for i, package in enumerate(truck1):
 find_loc_id(truck1_undelivered, truck1_undelivered_loc)
 
 # Find a sequence of packages that minimizes the distance traveled
-shortest_path_finder(truck1_undelivered, 1, 0)
+shortest_path_finder(truck1_undelivered, 1)
 
 
 # this for loop takes the values in the first truck and runs them through the distance functions in the distances.py file
@@ -129,7 +125,7 @@ truck1_tot_dist = find_dist(
     truck1_tot_dist,
     truck1_pkg_seq,
     truck1_undelivered,
-    first_truck_package_id,
+    # first_truck_package_id,
     truck1_times,
 )
 
@@ -144,7 +140,7 @@ for i, pkg in enumerate(truck2):
 find_loc_id(truck2_undelivered, truck2_undelivered_loc)
 
 # Find a sequence of packages that minimizes the distance traveled
-shortest_path_finder(truck2_undelivered, 2, 0)
+shortest_path_finder(truck2_undelivered, 2)
 
 # Find the distances between locations, and to add the distances up
 truck2_tot_dist = find_dist(
@@ -152,7 +148,7 @@ truck2_tot_dist = find_dist(
     truck2_tot_dist,
     truck2_pkg_seq,
     truck2_undelivered,
-    second_truck_package_id,
+    # second_truck_package_id,
     truck2_times,
 )
 
@@ -167,7 +163,7 @@ for i, pkg in enumerate(truck3):
 find_loc_id(truck3_undelivered, truck3_undelivered_loc)
 
 # Find the distances between locations, and to add the distances up
-shortest_path_finder(truck3_undelivered, 3, 0)
+shortest_path_finder(truck3_undelivered, 3)
 
 # Find the distances between locations, and to add the distances up
 truck3_tot_dist = find_dist(
@@ -175,7 +171,7 @@ truck3_tot_dist = find_dist(
     truck3_tot_dist,
     truck3_pkg_seq,
     truck3_undelivered,
-    third_truck_package_id,
+    # third_truck_package_id,
     truck3_times,
 )
 
