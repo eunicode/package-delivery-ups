@@ -39,7 +39,7 @@ with open("csv/location_data.csv") as csv_file_location:
     # ------------------------------------------------------------------
     # Find the distance between location #1 and location #2
     # Time complexity = O(1)
-    def check_current_distance(row_value, column_value):
+    def distance_get(row_value, column_value):
         # Distance btw loc #1 and loc #2
         distance = csv_reader_dist[row_value][column_value]
 
@@ -52,31 +52,31 @@ with open("csv/location_data.csv") as csv_file_location:
     # ------------------------------------------------------------------
     # Calculate accumulated time. Also calculate and store time intervals.
     # Time complexity = O(N)
-    def check_time(dist, time):
+    def time_accumulate(dist, time):
         # Calculate the time it took to travel a distance by using the truck's speed.
-        new_time = dist / 18  # miles * (1 hour/18 miles) = hours
+        hours = dist / 18  # miles * (1 hour/18 miles) = hours
         # Take hours float and format it into a string of hours and minutes
-        distance_in_minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(new_time * 60, 60))
-        final_time = distance_in_minutes + ":00"  # Add seconds to string
+        minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(hours * 60, 60))
+        time_string = minutes + ":00"  # Add seconds to string
 
         # Add time interval to `time` list
-        time.append(final_time)
+        time.append(time_string)
 
-        sum = datetime.timedelta()
+        total_time = datetime.timedelta()
         # Add all the time intervals in `time` list
         for t in time:
             d = str_to_timedelta(t)
-            sum += d
-        return sum
+            total_time += d
+        return total_time
 
     # ------------------------------------------------------------------
-    # Lists to hold the order of sorted packages
-    first_optimized_truck = []
-    first_optimized_truck_index_list = []
-    second_optimized_truck = []
-    second_optimized_truck_index_list = []
-    third_optimized_truck = []
-    third_optimized_truck_index_list = []
+    # Lists to hold packages in the optimized order
+    truck1_pkg_seq = []
+    truck1_loc_seq = []
+    truck2_pkg_seq = []
+    truck2_loc_seq = []
+    truck3_pkg_seq = []
+    truck3_loc_seq = []
 
     # Find a sequence of packages to deliver that will minimize the travel distance.
     # This is a single source shortest path algorithm that uses a greedy approach.
@@ -92,39 +92,37 @@ with open("csv/location_data.csv") as csv_file_location:
     # Then we jump back to the while loop and the for loop searches for the closest location to the
     # new current location.
     # The while loop ends when we have visited all the locations.
-    def calculate_shortest_distance(
-        truck_distance_list, truck_number, current_location
-    ):
+    def shortest_path_finder(truck_distance_list, truck_num, current_location):
 
         # Sub-function that adds locations to the visited-locations list, removes locations from
         # the locations-to-visit list, and updates the current location
-        def manage_queue(organized_list, organized_list_index, index):
-            organized_list.append(index)
-            organized_list_index.append(index["location_id"])
-            pop_value = truck_distance_list.index(index)
-            truck_distance_list.pop(pop_value)
+        def manage_queue(truck_pkg_opt, truck_loc_opt, idx):
+            truck_pkg_opt.append(idx)  # Add package to truck
+            truck_loc_opt.append(idx["location_id"])  # Add location to visited list
+            pop_idx = truck_distance_list.index(idx)  # Find index of visited location
+            truck_distance_list.pop(pop_idx)  # Remove from unvisited list
             nonlocal current_location
-            current_location = new_location
+            current_location = temp_location
 
         # Iterate the locations-to-visit list
         while len(truck_distance_list) > 0:
             # Initialize the closest distance to be infinity
             closest_dist = math.inf
             # Initialize the current location to location #0 (hub)
-            new_location = 0
+            temp_location = 0
 
             # Iterate the locations-to-visit list
             for index in truck_distance_list:
                 # If the distance between location #1 and location #2 is the less than the current
                 # distance, update it
                 if (
-                    check_current_distance(current_location, int(index["location_id"]))
+                    distance_get(current_location, int(index["location_id"]))
                     <= closest_dist
                 ):
-                    closest_dist = check_current_distance(
+                    closest_dist = distance_get(
                         current_location, int(index["location_id"])
                     )
-                    new_location = int(index["location_id"])
+                    temp_location = int(index["location_id"])
 
             # Iterate the visited-locations list.
             # The visited-locations list is synonymous to the sequence of packages that a truck needs to deliver.
@@ -134,37 +132,31 @@ with open("csv/location_data.csv") as csv_file_location:
             # Update current_location
             for index in truck_distance_list:
                 if (
-                    check_current_distance(current_location, int(index["location_id"]))
+                    distance_get(current_location, int(index["location_id"]))
                     == closest_dist
                 ):
-                    if truck_number == 1:
+                    if truck_num == 1:
                         manage_queue(
-                            first_optimized_truck,
-                            first_optimized_truck_index_list,
-                            index,
+                            truck1_pkg_seq, truck1_loc_seq, index,
                         )
 
-                    elif truck_number == 2:
+                    elif truck_num == 2:
                         manage_queue(
-                            second_optimized_truck,
-                            second_optimized_truck_index_list,
-                            index,
+                            truck2_pkg_seq, truck2_loc_seq, index,
                         )
 
-                    elif truck_number == 3:
+                    elif truck_num == 3:
                         manage_queue(
-                            third_optimized_truck,
-                            third_optimized_truck_index_list,
-                            index,
+                            truck3_pkg_seq, truck3_loc_seq, index,
                         )
 
         return truck_distance_list
 
     # ------------------------------------------------------------------
     # Initialize locations the truck needs to visit with "0", the location ID for the hub
-    first_optimized_truck_index_list.insert(0, "0")
-    second_optimized_truck_index_list.insert(0, "0")
-    third_optimized_truck_index_list.insert(0, "0")
+    truck1_loc_seq.insert(0, "0")
+    truck2_loc_seq.insert(0, "0")
+    truck3_loc_seq.insert(0, "0")
 
 
 # =================================================================
@@ -176,6 +168,7 @@ TO DO
 Create class
 class MyDeliverySystem
 MyDeliverySystem.run()
+Decorator 
 
 --------------------------------------------------------------------
 ValueError : I/O operation on closed file
