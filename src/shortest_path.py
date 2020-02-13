@@ -5,8 +5,9 @@ import math
 from helper import print_csv
 from helper import str_to_timedelta
 
-# Copy distances csv data
-# Space complexity = O(N). Time complexity = O(N)
+# Copy "distances" csv data
+# Space complexity = O(N)
+# Time complexity = O(N)
 # Open csv file as a text file and get a file object
 with open("csv/distance_data.csv") as csv_file:
     # Convert to iterable reader object to list
@@ -24,7 +25,7 @@ with open("csv/location_data.csv") as csv_file_location:
     # Calculate current total traveled distance
     # Add distance to a distance accumulator variable passed in as an argument
     # Time complexity = O(1)
-    def check_distance(row_value, column_value, sum_of_distance):
+    def distance_accumulate(row_value, column_value, dist_acc):
         # Distance btw loc #1 and loc #2
         distance = csv_reader_dist[row_value][column_value]
 
@@ -32,25 +33,23 @@ with open("csv/location_data.csv") as csv_file_location:
             distance = csv_reader_dist[column_value][row_value]
 
         # Add distance to distance accumulator
-        sum_of_distance += float(distance)
-        return sum_of_distance
+        dist_acc += float(distance)
+        return dist_acc
 
+    # ------------------------------------------------------------------
     # Find the distance between location #1 and location #2
     # Time complexity = O(1)
     def check_current_distance(row_value, column_value):
-        distance = csv_reader_dist[row_value][
-            column_value
-        ]  # Distance btw loc #1 and loc #2
+        # Distance btw loc #1 and loc #2
+        distance = csv_reader_dist[row_value][column_value]
 
+        # Distance btw loc #2 and loc #1
         if distance is "":
-            distance = csv_reader_dist[column_value][
-                row_value
-            ]  # Distance btw loc #2 and loc #1
+            distance = csv_reader_dist[column_value][row_value]
 
         return float(distance)
 
     # ------------------------------------------------------------------
-
     # Calculate accumulated time. Also calculate and store time intervals.
     # Time complexity = O(N)
     def check_time(dist, time):
@@ -81,20 +80,18 @@ with open("csv/location_data.csv") as csv_file_location:
 
     # Find a sequence of packages to deliver that will minimize the travel distance.
     # This is a single source shortest path algorithm that uses a greedy approach.
-    # The algorithm uses a list to store the sequence of packages to deliver, and another list to
-    # keep track of delivered packages.
+    # The algorithm uses lists to store visited locations and unvisited locations.
     # The algorithm works by searching for the closest location to its current location.
     # Once it finds the closest location, it adds that location to the visited-locations list, and
     # removes that location from locations-to-visit list.
     # The time complexity is O(N^2) because it has a while loop with a nested for loop.
-    # The while loop has a for loop that iterates the locations-to-visit list until it finds the
-    # closest location.
+    # The while loop keeps running until the locations-to-visit list is empty.
+    # The inner for loop iterates the locations-to-visit list until it finds the closest location.
     # Once the for loop finds the closest location, it updates the current location and removes that
     # location from the locations-to-visit list.
     # Then we jump back to the while loop and the for loop searches for the closest location to the
     # new current location.
-    # The while loop keeps running until the locations-to-visit list is empty.
-
+    # The while loop ends when we have visited all the locations.
     def calculate_shortest_distance(
         truck_distance_list, truck_number, current_location
     ):

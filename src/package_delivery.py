@@ -8,7 +8,7 @@ from hash_table_instance import (
 )
 
 from shortest_path import (
-    check_distance,
+    distance_accumulate,
     check_time,
     check_current_distance,
     calculate_shortest_distance,
@@ -81,7 +81,7 @@ def find_dist(
 
         # Calculate the total distance traveled
         # Time complexity = O(1)
-        truck_tot_dist = check_distance(
+        truck_tot_dist = distance_accumulate(
             int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]), truck_tot_dist,
         )
 

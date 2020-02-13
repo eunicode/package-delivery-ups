@@ -9,7 +9,8 @@ print("Welcome to the package delivery system!\n")
 print(f"All packages were delivered in {total_distance()} miles.")
 
 # -------------------------------------------------------------------
-
+# The time complexity for printing all packages is O(N)
+# The time complexity for printing one package is O(1)
 while True:
     # Store user input in `command` and display interface menu options
     command = input(
@@ -28,34 +29,33 @@ while True:
     # This code block has a time complexity of O(N) bc it will iterate all the packages in the hash table.
     # Inside the for loop we have a get() operation which has a time complexity of O(1).
     if command == "status":
-        package_status_time = input("Enter a time in the HH:MM:SS format: ")
-        convert_input_time = str_to_timedelta(package_status_time)
-
+        input_time = input("Enter a time in the HH:MM:SS format: ")
+        convert_input_time = str_to_timedelta(input_time)
+        # Run code block for every package
         for id in range(1, 41):
             # Get times from the hash table
-            first_time = ht_pkgs.get(str(id))["delivery_start"]
-            second_time = ht_pkgs.get(str(id))["delivery_status"]
+            departure = ht_pkgs.get(str(id))["delivery_start"]
+            arrival = ht_pkgs.get(str(id))["delivery_status"]
 
             # Convert strings to timedelta
-            convert_first_time = str_to_timedelta(first_time)
-            convert_second_time = str_to_timedelta(second_time)
+            convert_departure = str_to_timedelta(departure)
+            convert_arrival = str_to_timedelta(arrival)
 
             # First checks all packages against the given time determine if they have left the hub yet.
             # If the user input time is earlier than the departure time, the package is in the hub.
-            # if convert_first_time >= convert_input_time:
-            if convert_input_time <= convert_first_time:
-                ht_pkgs.get(str(id))["delivery_start"] = "Leaves at " + first_time
+            if convert_input_time <= convert_departure:
+                ht_pkgs.get(str(id))["delivery_start"] = "Leaves at " + departure
                 ht_pkgs.get(str(id))["delivery_status"] = "At hub"
 
                 # Print package data
                 interface_print_single(id)
+
             # If user input time is later than the departure time, the package is either in transit
             # or delivered.
-            elif convert_input_time >= convert_first_time:
-                # elif convert_first_time <= convert_input_time:
+            elif convert_input_time >= convert_departure:
                 # If user input time is before the delivery time, the package is in transit
-                if convert_input_time < convert_second_time:
-                    ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
+                if convert_input_time < convert_arrival:
+                    ht_pkgs.get(str(id))["delivery_start"] = "Left at " + departure
                     ht_pkgs.get(str(id))["delivery_status"] = "In transit"
 
                     # Print package data
@@ -63,10 +63,8 @@ while True:
 
                 # If user input time is after the delivery time, the package is delivered
                 else:
-                    ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
-                    ht_pkgs.get(str(id))["delivery_status"] = (
-                        "Delivered at " + second_time
-                    )
+                    ht_pkgs.get(str(id))["delivery_start"] = "Left at " + departure
+                    ht_pkgs.get(str(id))["delivery_status"] = "Delivered at " + arrival
 
                     # Print package data
                     interface_print_single(id)
@@ -76,28 +74,27 @@ while True:
     # This code block is O(1) bc the operations in this code block, such as the get() operation, is O(1)
     elif command == "lookup":
         id = input("Enter a package ID to lookup: ")
-        first_time = ht_pkgs.get(str(id))["delivery_start"]
-        second_time = ht_pkgs.get(str(id))["delivery_status"]
-        package_status_time = input("Enter a time in the HH:MM:SS format: ")
+        departure = ht_pkgs.get(str(id))["delivery_start"]
+        arrival = ht_pkgs.get(str(id))["delivery_status"]
+        input_time = input("Enter a time as HH:MM:SS: ")
 
-        convert_input_time = str_to_timedelta(package_status_time)
-        convert_first_time = str_to_timedelta(first_time)
-        convert_second_time = str_to_timedelta(second_time)
+        convert_input_time = str_to_timedelta(input_time)
+        convert_departure = str_to_timedelta(departure)
+        convert_arrival = str_to_timedelta(arrival)
 
         # If user input time is earlier than the departure time, the package is at the hub.
-        if convert_input_time <= convert_first_time:
-            ht_pkgs.get(str(id))["delivery_start"] = "Leaves at " + first_time
+        if convert_input_time <= convert_departure:
+            ht_pkgs.get(str(id))["delivery_start"] = "Leaves at " + departure
             ht_pkgs.get(str(id))["delivery_status"] = "At hub"
 
             # Print package data
             interface_print_single(id)
 
         # If the user input time is later than the departure time:
-        elif convert_input_time >= convert_first_time:
-            # elif convert_first_time <= convert_input_time:
+        elif convert_input_time >= convert_departure:
             # If the user input time is before the delivery time, the package is in transit
-            if convert_input_time < convert_second_time:
-                ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
+            if convert_input_time < convert_arrival:
+                ht_pkgs.get(str(id))["delivery_start"] = "Left at " + departure
                 ht_pkgs.get(str(id))["delivery_status"] = "In transit"
 
                 # Print package data
@@ -105,8 +102,8 @@ while True:
 
             # If the user input time is after the delivery time, the package is delivered
             else:
-                ht_pkgs.get(str(id))["delivery_start"] = "Left at " + first_time
-                ht_pkgs.get(str(id))["delivery_status"] = "Delivered at " + second_time
+                ht_pkgs.get(str(id))["delivery_start"] = "Left at " + departure
+                ht_pkgs.get(str(id))["delivery_status"] = "Delivered at " + arrival
 
                 # Print package data
                 interface_print_single(id)
