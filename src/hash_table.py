@@ -47,7 +47,7 @@ class HashTable:
     # bucket lists.
     # The worst case time complexity is O(N), but this will not happen bc our hash function
     # evenly distributes packages into buckets, and we can adjust the hash function and hash table
-    # size so that our buckets will always have a small number of packages.
+    # size so that our buckets will always have a small number of packages (constant size).
     def get(self, key):
         hash_value = self._hash_fxn(key)
 

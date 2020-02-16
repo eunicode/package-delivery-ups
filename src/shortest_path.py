@@ -16,7 +16,8 @@ with open("csv/distance_data.csv") as csv_file:
     # print_csv(csv_reader_dist)
 
 # Copy location csv data
-# Space complexity = O(N). Time complexity = O(N)
+# Space complexity = O(N)
+# Time complexity = O(N)
 with open("csv/location_data.csv") as csv_file_location:
     csv_reader_location = csv.reader(csv_file_location, delimiter=",")
     csv_reader_location = list(csv_reader_location)
@@ -103,7 +104,7 @@ with open("csv/location_data.csv") as csv_file_location:
             pop_idx = truck_unvisited.index(idx)  # Find index of visited location
             truck_unvisited.pop(pop_idx)  # Remove from unvisited list
             nonlocal current_location
-            current_location = temp_location
+            current_location = temp_location  # Update current location
 
         # Iterate the locations-to-visit list
         while len(truck_unvisited) > 0:

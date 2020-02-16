@@ -6,7 +6,7 @@ from helper import interface_print, str_to_timedelta, interface_print_single
 
 print("Welcome to the package delivery system!\n")
 
-print(f"All packages were delivered in {total_distance()} miles.")
+print(f"All packages were delivered in {total_distance} miles.")
 
 # -------------------------------------------------------------------
 # The time complexity for printing all packages is O(N)
@@ -17,7 +17,6 @@ while True:
         """
     =================================================================
     MENU:
-    Enter "insert" to add a package.
     Enter "lookup" to lookup a package by its ID.
     Enter "status" to view the delivery status of all packages.
     Enter "exit" to exit program.

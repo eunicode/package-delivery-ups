@@ -8,9 +8,9 @@ from hash_table_instance import (
 )
 
 from shortest_path import (
+    distance_get,
     distance_accumulate,
     time_accumulate,
-    distance_get,
     shortest_path_finder,
     truck1_loc_seq,
     truck1_pkg_seq,
@@ -38,7 +38,7 @@ departure_times = {
     "third_time": "10:30:00",  # Time first truck returns
 }
 
-# Variables to hold the times to travel edges
+# Variables to hold the times it takes to travel edges
 truck1_times = [departure_times["first_time"]]
 truck2_times = [departure_times["second_time"]]
 truck3_times = [departure_times["third_time"]]
@@ -71,34 +71,32 @@ def find_loc_id(delivery, dist_list):
 # Function to find the distances between locations, add the distances up
 # Time complexity = O(N^2)
 def find_dist(
-    opt_truck_idx, truck_tot_dist, opt_truck_list, delivery, time_list,
+    truck_opt_loc, truck_tot_dist, truck_opt_pkg, delivery, time_list,
 ):
-    for index in range(len(opt_truck_idx)):
+    for index in range(len(truck_opt_loc)):
         # If we are at the last location, exit for loop
-        if index == len(opt_truck_idx) - 1:
+        if index == len(truck_opt_loc) - 1:
             break
 
         # Calculate the total distance traveled
         # Time complexity = O(1)
         truck_tot_dist = distance_accumulate(
-            int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]), truck_tot_dist,
+            int(truck_opt_loc[index]), int(truck_opt_loc[index + 1]), truck_tot_dist,
         )
 
         # Calculate accumulated time. Also calculate and store time intervals.
         # Time complexity = O(N)
         deliver_package = time_accumulate(
-            distance_get(int(opt_truck_idx[index]), int(opt_truck_idx[index + 1]),),
+            distance_get(int(truck_opt_loc[index]), int(truck_opt_loc[index + 1]),),
             time_list,
         )
 
         # Update the delivery time
-        opt_truck_list[index]["delivery_status"] = str(deliver_package)
+        truck_opt_pkg[index]["delivery_status"] = str(deliver_package)
 
         ht_pkgs.update(
-            opt_truck_list[index]["package_id"], opt_truck_list[index],
+            truck_opt_pkg[index]["package_id"], truck_opt_pkg[index],
         )
-
-        # truck_pkg_id += 1
 
     return truck_tot_dist
 
@@ -116,17 +114,9 @@ find_loc_id(truck1_undelivered, truck1_undelivered_loc)
 # Find a sequence of packages that minimizes the distance traveled
 shortest_path_finder(truck1_undelivered, 1)
 
-
-# this for loop takes the values in the first truck and runs them through the distance functions in the distances.py file
-
 # Find the distances between locations, and to add the distances up
 truck1_tot_dist = find_dist(
-    truck1_loc_seq,
-    truck1_tot_dist,
-    truck1_pkg_seq,
-    truck1_undelivered,
-    # first_truck_package_id,
-    truck1_times,
+    truck1_loc_seq, truck1_tot_dist, truck1_pkg_seq, truck1_undelivered, truck1_times,
 )
 
 # ------------------------------------------------------------------
@@ -144,12 +134,7 @@ shortest_path_finder(truck2_undelivered, 2)
 
 # Find the distances between locations, and to add the distances up
 truck2_tot_dist = find_dist(
-    truck2_loc_seq,
-    truck2_tot_dist,
-    truck2_pkg_seq,
-    truck2_undelivered,
-    # second_truck_package_id,
-    truck2_times,
+    truck2_loc_seq, truck2_tot_dist, truck2_pkg_seq, truck2_undelivered, truck2_times,
 )
 
 # ------------------------------------------------------------------
@@ -167,21 +152,12 @@ shortest_path_finder(truck3_undelivered, 3)
 
 # Find the distances between locations, and to add the distances up
 truck3_tot_dist = find_dist(
-    truck3_loc_seq,
-    truck3_tot_dist,
-    truck3_pkg_seq,
-    truck3_undelivered,
-    # third_truck_package_id,
-    truck3_times,
+    truck3_loc_seq, truck3_tot_dist, truck3_pkg_seq, truck3_undelivered, truck3_times,
 )
 
 # ------------------------------------------------------------------
 # Add up all the distances to get the final total distance
-# Time complexity = O(1)
-def total_distance():
-    total_distance = truck1_tot_dist + truck2_tot_dist + truck3_tot_dist
-    return total_distance
-
+total_distance = truck1_tot_dist + truck2_tot_dist + truck3_tot_dist
 
 # =================================================================
 # TESTS
@@ -203,7 +179,7 @@ delivery location to hub, and the time of the last delivery.
 Find out why find_loc_id(delivery, dist_list) returns "Address not found!"
 
 Find out how hash table gets updated without this code: 
-ht_pkgs.update(opt_truck_list[truck_pkg_id]["package_id"], opt_truck_list[truck_pkg_id],)
+ht_pkgs.update(truck_opt_pkg[index]["package_id"], truck_opt_pkg[index],)
 
 --------------------------------------------------------------------
 VS Code and python debugger returning error but can run in the terminal
