@@ -10,9 +10,12 @@ from helper import str_to_timedelta
 # Time complexity = O(N)
 # Open csv file as a text file and get a file object
 with open("csv/distance_data.csv") as csv_file:
-    # Convert to iterable reader object to list
+    # Convert file object to iterable reader object
     csv_reader_dist = csv.reader(csv_file, delimiter=",")
-    csv_reader_dist = list(csv_reader_dist)
+
+    # Convert reader object to list
+    csv_reader_dist = list(csv_reader_dist)  # 2D list [ ["0.0", "", "", ""], ....]
+    # print(csv_reader_dist)
     # print_csv(csv_reader_dist)
 
 # Copy location csv data
@@ -30,7 +33,9 @@ with open("csv/location_data.csv") as csv_file_location:
         # Distance btw loc #1 and loc #2
         distance = csv_reader_dist[row_value][column_value]
 
-        if distance is "":  # Distance btw location #2 to location #1
+        if (
+            distance == ""
+        ):  # If distance btw loc #2 to loc #1 is empty string, reverse. The dist btw A & B is the same as B & A.
             distance = csv_reader_dist[column_value][row_value]
 
         # Add distance to distance accumulator
@@ -45,7 +50,7 @@ with open("csv/location_data.csv") as csv_file_location:
         distance = csv_reader_dist[row_value][column_value]
 
         # Distance btw loc #2 and loc #1
-        if distance is "":
+        if distance == "":
             distance = csv_reader_dist[column_value][row_value]
 
         return float(distance)
@@ -54,20 +59,21 @@ with open("csv/location_data.csv") as csv_file_location:
     # Calculate accumulated time. Also calculate and store time intervals.
     # Time complexity = O(N)
     def time_accumulate(dist, time):
-        # Calculate the time it took to travel a distance by using the truck's speed.
+        # Calculate the time it took to travel a distance by using the truck's speed (18 mph).
         hours = dist / 18  # miles * (1 hour/18 miles) = hours
         # Take hours float and format it into a string of hours and minutes
         minutes = "{0:02.0f}:{1:02.0f}".format(*divmod(hours * 60, 60))
         time_string = minutes + ":00"  # Add seconds to string
 
         # Add time interval to `time` list
-        time.append(time_string)
+        time.append(time_string)  # `time` is parameter
 
         total_time = datetime.timedelta()
         # Add all the time intervals in `time` list
         for t in time:
-            d = str_to_timedelta(t)
+            d = str_to_timedelta(t)  # Convert string to timedelta
             total_time += d
+
         return total_time
 
     # ------------------------------------------------------------------
@@ -98,11 +104,15 @@ with open("csv/location_data.csv") as csv_file_location:
 
         # Sub-function that adds locations to the visited-locations list, removes locations from
         # the locations-to-visit list, and updates the current location
-        def manage_queue(truck_pkg_opt, truck_loc_opt, idx):
-            truck_pkg_opt.append(idx)  # Add package to truck
+        def manage_queue(
+            truck_pkg_opt, truck_loc_opt, idx
+        ):  # idx is package dictionary {}
+            truck_pkg_opt.append(idx)  # Add package {} to truck
             truck_loc_opt.append(idx["location_id"])  # Add location to visited list
+
             pop_idx = truck_unvisited.index(idx)  # Find index of visited location
             truck_unvisited.pop(pop_idx)  # Remove from unvisited list
+
             nonlocal current_location
             current_location = temp_location  # Update current location
 
@@ -114,24 +124,29 @@ with open("csv/location_data.csv") as csv_file_location:
             temp_location = 0
 
             # Iterate the locations-to-visit list
-            for index in truck_unvisited:
+            for (
+                index
+            ) in truck_unvisited:  # index is a dictionary { package_id: 1, etc }
                 # If the distance between location #1 and location #2 is the less than the current
                 # distance, update it
                 if (
                     distance_get(current_location, int(index["location_id"]))
                     <= closest_dist
                 ):
+                    # Update closest distance
                     closest_dist = distance_get(
                         current_location, int(index["location_id"])
                     )
+                    # Update temp location
                     temp_location = int(index["location_id"])
 
-            # Iterate the visited-locations list.
-            # The visited-locations list is synonymous to the sequence of packages that a truck needs to deliver.
+            # We found location id of closest node, now we need to find that package dictionary in the array, so we can pass the package dictionary to the manage_queue() function
+            # TODO - Update previous for-loop to use enumerate() to access index of package dictionary in unvisited list and get rid of this second for-loop!!!
             # Update the appropriate trucks:
             # 1. Add location to visited-locations list.
             # 2. Remove location from locations-to-visit list
             # Update current_location
+
             for index in truck_unvisited:
                 if (
                     distance_get(current_location, int(index["location_id"]))
@@ -139,17 +154,23 @@ with open("csv/location_data.csv") as csv_file_location:
                 ):
                     if truck_num == 1:
                         manage_queue(
-                            truck1_pkg_seq, truck1_loc_seq, index,
+                            truck1_pkg_seq,
+                            truck1_loc_seq,
+                            index,
                         )
 
                     elif truck_num == 2:
                         manage_queue(
-                            truck2_pkg_seq, truck2_loc_seq, index,
+                            truck2_pkg_seq,
+                            truck2_loc_seq,
+                            index,
                         )
 
                     elif truck_num == 3:
                         manage_queue(
-                            truck3_pkg_seq, truck3_loc_seq, index,
+                            truck3_pkg_seq,
+                            truck3_loc_seq,
+                            index,
                         )
 
         # return truck_unvisited
@@ -202,6 +223,12 @@ list[0:2] = 'z'    ## replace ['a', 'b'] with ['z']
 print list         ## ['z', 'c', 'd']
 
 --------------------------------------------------------------------
+HOW TO ACCESS INDEX IN FOR-IN LOOP
+
+https://stackoverflow.com/questions/522563/accessing-the-index-in-for-loops
+
+Use enumerate() instead of for-in loop
+
 How to loop with indexes in Python
 https://treyhunner.com/2016/04/how-to-loop-with-indexes-in-python/
 
@@ -246,12 +273,36 @@ https://stackoverflow.com/questions/134934/display-number-with-leading-zeros
 divmod(dividend, divisor) = (quotient, remainder)
 
 --------------------------------------------------------------------
+COMPARISON: == VS IS
+https://realpython.com/courses/python-is-identity-vs-equality
+
+The == operator compares the value, or equality, of two objects, 
+whereas the Python is operator checks whether two variables point to the same object in memory. 
+In the vast majority of cases, this means you should use the equality operators == and !=, except when you’re comparing to None.
+
+
+--------------------------------------------------------------------
 MY NOTES
 
-variables in open() block seem to be global, not local
+variables in open() block seem to be global, not local to the open() block. 
 
-visited-locations = sequence of packages to deliver
-locations-to-visit = delivered packages
+visited-locations = `truck_loc_opt` (truck locations optimized) 
+Visited list.
+We visited/checked/chose this node, so we add it to the visited list.
+Also, sequence of packages that a truck needs to deliver.
+
+locations-to-visit = `truck_unvisited`
+Unvisited list. 
+These are locations we haven't visited, and we must search this list to find the closest location to our current location. 
 This may seem counter intuitive, but it's from the perspective of the algorithm, not from the 
 perspective of the truck. 
+I.e., it's not locations-to-visit for the truck to make deliveries. 
+It's locations-to-visit for the algorithm to find the closest node. 
+
+truck2_undelivered = unvisited list. Same as truck_unvisited. 
+[ 
+    { package_id: '2', location_id: '9', address: 'some string', deadline: 'EOD', weight: '44', delivery_start: '9:05:00', delivery_status: 'At hub'}, 
+    .... 
+]
+
 """

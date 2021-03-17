@@ -109,6 +109,24 @@ with open("csv/package_data.csv") as csv_file:
 #                             NOTES
 # =================================================================
 """
+WHAT HASH TABLE LOOKS LIKE
+{
+    # Bucket #1
+    [ 
+        ["1",["1","195 W Oakland Ave",], # one package 
+        ...3 more arrays
+    ], 
+    ...9 more arrays
+}
+
+--------------------------------------------------------------------
+WHAT TRUCK1 LOOKS LIKE
+[ 
+    { package_id: '1;, address: 'some-string', weight: '9'}, 
+    ...
+]
+
+--------------------------------------------------------------------
 Python "for" Loops (Definite Iteration)
 https://realpython.com/python-for-loop/
 

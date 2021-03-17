@@ -4,8 +4,10 @@ class HashTable:
     def __init__(self, size=10):
         self.size = size
         self.bucket_list = []
+
         # Chaining: Add an empty list (subcontainer) to every bucket.
         # Chaining means a bucket/index holds a list instead of a single value
+        # bucket_list = # [ [], [], [], [], [], ...]
         for bucket in range(size):
             self.bucket_list.append([])
 
@@ -142,6 +144,13 @@ class HashTable:
 #                             NOTES
 # =================================================================
 """
+WHAT IS THE POINT OF USING A HASH TABLE INSTEAD OF AN ARRAY? 
+
+So we can have O(1) lookup. 
+If we had an array, it would take O(N) to find the package with ID 36. 
+With a hash table, we can find package #36 in O(1) time. 
+
+--------------------------------------------------------------------
 TUPLES
 
 --------------------------------------------------------------------
@@ -184,4 +193,3 @@ put() / get() / remove()
 --------------------------------------------------------------------
 """
 # ------------------------------------------------------------------
-

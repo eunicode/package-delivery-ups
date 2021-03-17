@@ -71,7 +71,11 @@ def find_loc_id(delivery, dist_list):
 # Function to find the distances between locations, add the distances up
 # Time complexity = O(N^2)
 def find_dist(
-    truck_opt_loc, truck_tot_dist, truck_opt_pkg, delivery, time_list,
+    truck_opt_loc,
+    truck_tot_dist,
+    truck_opt_pkg,
+    delivery,
+    time_list,
 ):
     for index in range(len(truck_opt_loc)):
         # If we are at the last location, exit for loop
@@ -81,13 +85,18 @@ def find_dist(
         # Calculate the total distance traveled
         # Time complexity = O(1)
         truck_tot_dist = distance_accumulate(
-            int(truck_opt_loc[index]), int(truck_opt_loc[index + 1]), truck_tot_dist,
+            int(truck_opt_loc[index]),
+            int(truck_opt_loc[index + 1]),
+            truck_tot_dist,
         )
 
         # Calculate accumulated time. Also calculate and store time intervals.
         # Time complexity = O(N)
         deliver_package = time_accumulate(
-            distance_get(int(truck_opt_loc[index]), int(truck_opt_loc[index + 1]),),
+            distance_get(
+                int(truck_opt_loc[index]),
+                int(truck_opt_loc[index + 1]),
+            ),
             time_list,
         )
 
@@ -95,7 +104,8 @@ def find_dist(
         truck_opt_pkg[index]["delivery_status"] = str(deliver_package)
 
         ht_pkgs.update(
-            truck_opt_pkg[index]["package_id"], truck_opt_pkg[index],
+            truck_opt_pkg[index]["package_id"],
+            truck_opt_pkg[index],
         )
 
     return truck_tot_dist
@@ -116,7 +126,11 @@ shortest_path_finder(truck1_undelivered, 1)
 
 # Find the distances between locations, and to add the distances up
 truck1_tot_dist = find_dist(
-    truck1_loc_seq, truck1_tot_dist, truck1_pkg_seq, truck1_undelivered, truck1_times,
+    truck1_loc_seq,
+    truck1_tot_dist,
+    truck1_pkg_seq,
+    truck1_undelivered,
+    truck1_times,
 )
 
 # ------------------------------------------------------------------
@@ -134,7 +148,11 @@ shortest_path_finder(truck2_undelivered, 2)
 
 # Find the distances between locations, and to add the distances up
 truck2_tot_dist = find_dist(
-    truck2_loc_seq, truck2_tot_dist, truck2_pkg_seq, truck2_undelivered, truck2_times,
+    truck2_loc_seq,
+    truck2_tot_dist,
+    truck2_pkg_seq,
+    truck2_undelivered,
+    truck2_times,
 )
 
 # ------------------------------------------------------------------
@@ -152,7 +170,11 @@ shortest_path_finder(truck3_undelivered, 3)
 
 # Find the distances between locations, and to add the distances up
 truck3_tot_dist = find_dist(
-    truck3_loc_seq, truck3_tot_dist, truck3_pkg_seq, truck3_undelivered, truck3_times,
+    truck3_loc_seq,
+    truck3_tot_dist,
+    truck3_pkg_seq,
+    truck3_undelivered,
+    truck3_times,
 )
 
 # ------------------------------------------------------------------
@@ -170,11 +192,11 @@ total_distance = truck1_tot_dist + truck2_tot_dist + truck3_tot_dist
 TO DO
 
 Get rid of globals. Or package them in an array. 
-Find a better way to initialize global primitive variables, pass them as arguments to functions,
-and then update them. Currently reassigning values after calling function.
+Find a better way to initialize global primitive variables, pass them as arguments to functions, and then update them. 
+Currently reassigning values after calling function.
 
-Make a function to calculate third departure time. Calculate the time from the distance of last 
-delivery location to hub, and the time of the last delivery. 
+Make a function to calculate third departure time. 
+Calculate the time from the distance of last delivery location to hub, and the time of the last delivery. 
 
 Find out why find_loc_id(delivery, dist_list) returns "Address not found!"
 
@@ -182,6 +204,8 @@ Find out how hash table gets updated without this code:
 ht_pkgs.update(truck_opt_pkg[index]["package_id"], truck_opt_pkg[index],)
 
 --------------------------------------------------------------------
+DEBUGGER
+
 VS Code and python debugger returning error but can run in the terminal
 https://stackoverflow.com/questions/55758072/vs-code-and-python-debugger-returning-error-but-can-run-in-the-terminal
 
@@ -189,7 +213,11 @@ launch.json
 "cwd": "${fileDirname}/<WhateverYouWant>"
 
 --------------------------------------------------------------------
+SCOPE - NONLOCAL
+
 Functions have their own scope. Functions have their own variables. 
-You can pass a global primitive variable as an argument, but the function will create its own variable 
-that is initialized to that primitive value. It does not mutate the global primitive variable.
+You can pass a global primitive variable as an argument, 
+but the function will create its own variable 
+that is initialized to that primitive value. 
+It does not mutate/update/re-assign/change the global primitive variable.
 """

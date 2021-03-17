@@ -1,9 +1,8 @@
 {
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
   "python.formatting.provider": "black",
   "[python]": {
     "editor.tabSize": 4
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "python.pythonPath": "/Users/eunice/github/package-delivery-ups/env/bin/python3.9"
 }

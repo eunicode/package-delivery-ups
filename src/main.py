@@ -1,5 +1,3 @@
-# Eunice Park ID: #001128345
-
 from hash_table_instance import ht_pkgs
 from package_delivery import total_distance
 from helper import interface_print, str_to_timedelta, interface_print_single
@@ -30,6 +28,7 @@ while True:
     if command == "status":
         input_time = input("Enter a time in the HH:MM:SS format: ")
         convert_input_time = str_to_timedelta(input_time)
+
         # Run code block for every package
         for id in range(1, 41):
             # Get times from the hash table
@@ -72,7 +71,7 @@ while True:
     # This code block prints data for a user specified package
     # This code block is O(1) bc the operations in this code block, such as the get() operation, is O(1)
     elif command == "lookup":
-        id = input("Enter a package ID to lookup: ")
+        id = input("Enter a package ID to lookup: ")  # package ids 1-40
         departure = ht_pkgs.get(str(id))["delivery_start"]
         arrival = ht_pkgs.get(str(id))["delivery_status"]
         input_time = input("Enter a time as HH:MM:SS: ")
@@ -137,6 +136,20 @@ Create an Interface class or function
 Don't add additional text to delivery_start or delivery_status key values
 Create tests to make sure hash table is being updated correctly, 
 the shortest path algo is working correctly, etc.
+
+Package IDs from 1-40
+Trucks start leaving at 8:00 AM
+3 trucks, 2 drivers
+Truck can carry max 16 packages
+Truck travel at 18 mph. 
+
+ERRORS
+
+status > 15:00:00
+
+ File "/Users/eunice/github/package-delivery-ups/src/helper.py", line 47, in str_to_timedelta
+    (hour, min, sec) = str.split(":")
+ValueError: not enough values to unpack (expected 3, got 1)
 
 --------------------------------------------------------------------
 
